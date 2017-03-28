@@ -126,10 +126,21 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                        	<td>Project A</td>
-                                        	<td>lorem ipsum dolor</td>
-                                        	<td id="curtime"></td>
-                                        	<td><button class="pe-7s-play btn btn-warning btn-fill btn-sm"></button></td>
+                                            <form method="post" action="#">
+                                                <td>
+                                                    <select>
+                                                        <option value="projecta">Project A</option>
+                                                        <option value="projectb">Project B</option>
+                                                        <option value="offproject">Off Project</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <label for="task"></label>
+                                                    <input type="text" id="task" size="40">
+                                                </td>
+                                                <td id="curtime"></td>
+                                                <td><button class="pe-7s-play btn btn-warning btn-fill btn-sm"></button></td>
+                                            </form>
                                         </tr>
                                         <script>
                                             var currentdate = new Date();
