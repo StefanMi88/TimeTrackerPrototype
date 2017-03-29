@@ -89,7 +89,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Projects</a>
+                    <a class="navbar-brand" href="#">Add User to Task</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -110,19 +110,18 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Add new Project...</h4>
-                                <p class="category">Enter settings and click create button</p>
+                                <h4 class="title">Add User...</h4>
+                                <p class="category">Enter user and click Add button</p>
                             </div>
                             <div class="content">
                                 <form method="post" action="#">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label for="name" >Name:</label>
-                                            <input class="" type="text" id="name">
-                                        </div>
-                                        <div class="col-md-7">
-                                            <label for="desc">Description:</label>
-                                            <input type="text" id="desc" size="60">
+                                            <label for="name" >User:</label>
+											<select>
+                                                        <option value="projecta">Toni Polster</option>
+                                                        <option value="projectb">Herbert Prohaska</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-2">
                                             <button class="btn btn-warning btn-fill btn-sm">Create</button>
@@ -136,35 +135,23 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Existing Projects</h4>
-                                <p class="category">Click the edit icon on the right to edit</p>
+                                <h4 class="title">Users</h4>
+                                <p class="category">Users assigned to the task</p>
                             </div>
                             <div class="content table-responsive table-full-width">
                                 <table class="table table-hover table-striped">
                                     <thead>
-                                        <th>ID</th>
-                                    	<th>Name</th>
-                                    	<th>Description</th>
-                                        <th>Edit</th>
+                                        <th>First Name</th>
+                                    	<th>Last Name</th>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                        	<td>1</td>
-                                        	<td>Project A</td>
-                                        	<td>Sample Project A</td>
-                                            <td><a href="edit_project.html" title="Edit"><span class="pe-7s-edit"></span></a></td>
+                                        	<td>Toni</td>
+                                        	<td>Polster</td>
                                         </tr>
                                         <tr>
-                                        	<td>2</td>
-                                        	<td>Project B</td>
-                                        	<td>Sample Project B</td>
-                                            <td><a href="edit_project.html" title="Edit"><span class="pe-7s-edit"></span></a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Off Project</td>
-                                            <td>Use this if not working on any project</td>
-                                            <td><a href="edit_project.html" title="Edit"><span class="pe-7s-edit"></span></a></td>
+                                        	<td>Hans</td>
+                                        	<td>Krankl</td>
                                         </tr>
                                     </tbody>
                                 </table>
