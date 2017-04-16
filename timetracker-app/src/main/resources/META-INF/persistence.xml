@@ -1,0 +1,32 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="DBCON" transaction-type="RESOURCE_LOCAL">
+        <description>
+            Persistence unit
+        </description>
+        
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <!--  <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider> --> 
+
+        <class>at.jku.timetracker.model.User</class>
+
+        <properties>
+            <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/timetracker" />
+            <property name="javax.persistence.jdbc.user" value="admin" />
+            <property name="javax.persistence.jdbc.password" value="admin" />--> 
+
+			<property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306/timetracker"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver"/>
+            <property name="openjpa.ConnectionUserName" value="admin"/>
+            <property name="openjpa.ConnectionPassword" value="admin"/>
+            <property name="openjpa.RuntimeUnenhancedClasses" value="warn"/>
+            
+        </properties>
+
+    </persistence-unit>
+
+</persistence>
