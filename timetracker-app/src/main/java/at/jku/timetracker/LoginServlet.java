@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import at.jku.timetracker.database.DatabaseConnector;
 
+
 @WebServlet(
         name = "LoginServlet",
         urlPatterns = {"/login"}
@@ -25,13 +26,17 @@ public class LoginServlet extends HttpServlet{
 		 String username = req.getParameter("username");
 		 String password = req.getParameter("password");
 		 
-		 DatabaseConnector db = new DatabaseConnector();
-		 
-		 db.getEntityManager().createNativeQuery("SELECT ");
-		 
+		 //DatabaseConnector db = new DatabaseConnector();
+		 		 
 		 String nextJSP = "/jsp/tracker.jsp";
 	     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 	     dispatcher.forward(req, resp);
 	    }
+	 	
+	 	@Override
+	 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	 	// TODO Auto-generated method stub
+	 	super.doGet(req, resp);
+	 	}
 	
 }

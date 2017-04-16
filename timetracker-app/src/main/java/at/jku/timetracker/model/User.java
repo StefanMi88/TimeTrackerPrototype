@@ -2,20 +2,33 @@ package at.jku.timetracker.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="USER")
 public class User {
 
+	@Id
 	@Column(name = "USERNAME")
-	 private String username;
+	private String username;
 	
 	@Column(name = "PASSWORD")
 	private String password;
 	
 	@Column(name = "TYPE")
 	private String type;
+
+	
+	public User() {
+		super();
+	}
+
+	public User(String username, String password, String type) {
+		this.username = username;
+		this.password = password;
+		this.type = type;
+	}
 
 	public String getUsername() {
 		return username;

@@ -8,13 +8,14 @@
             Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
         </description>
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>at.jku.timetracker</class>
+
+        <class>at.jku.timetracker.model.User</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/timetracker" />
-            <property name="javax.persistence.jdbc.user" value="max" />
-            <property name="javax.persistence.jdbc.password" value="max" />
+            <property name="javax.persistence.jdbc.user" value="admin" />
+            <property name="javax.persistence.jdbc.password" value="admin" />
 
         </properties>
 
