@@ -1,4 +1,4 @@
 xampp -> phpadmin starten
 datenbank mit name "timetracker" anlegen
-user mit name "admin" und passwort "admin" anlegen(alle Rechte vergeben)
+user mit name "admin" und passwort "admin" und Hostname "Lokal" anlegen(alle Rechte vergeben)
 script timetracker.sql ausführen
