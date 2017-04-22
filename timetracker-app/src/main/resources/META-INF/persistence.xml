@@ -11,7 +11,7 @@
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <!--  <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider> --> 
 
-        <class>at.jku.timetracker.model.User</class>
+        <!--<class>at.jku.timetracker.model.User</class>-->
 
         <properties>
             <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

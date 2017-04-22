@@ -31,16 +31,19 @@ public class LoginServlet extends HttpServlet{
 		 DatabaseConnector db = new DatabaseConnector();
 		 
 		 db.getEntityManager().getTransaction().begin();
-		 Query query = db.getEntityManager().createQuery("Select u from User u where u.username = :username");
+		 /*Query query = db.getEntityManager().createQuery("Select u from User u where u.username = :username");
 		 query.setParameter("username", username);
-		 User u = (User) query.getSingleResult();
+		 User u = (User) query.getSingleResult();*/
+		 Query query = db.getEntityManager().createNativeQuery("Select password from user where username = '" +username+"'");
+		 String pwd = (String) query.getSingleResult();
 		 db.getEntityManager().getTransaction().commit();
 		 
-		 if (u.getPassword() == password) {
+		 if (pwd == password) {
 			 String nextJSP = "/jsp/tracker.jsp";
 		     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 		     dispatcher.forward(req, resp);
 		}
+		 
 		 
 	    }
 	 	
