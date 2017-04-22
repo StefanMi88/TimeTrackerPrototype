@@ -45,32 +45,32 @@
 
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="tracker.html" class="simple-text">
+                <a href="/tracker" class="simple-text">
                     Time Tracker
                 </a>
             </div>
 
             <ul class="nav">
                 <li class="active">
-                    <a href="tracker.html">
+                    <a href="/tracker">
                         <i class="pe-7s-timer"></i>
                         <p>Track Time</p>
                     </a>
                 </li>
                 <li>
-                    <a href="dashboard.html">
+                    <a href="/dashboard">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li>
-                    <a href="projects.html">
+                    <a href="/project">
                         <i class="pe-7s-note2"></i>
                         <p>Projects</p>
                     </a>
                 </li>
                 <li>
-                    <a href="user.html">
+                    <a href="/user">
                         <i class="pe-7s-user"></i>
                         <p>Users</p>
                     </a>

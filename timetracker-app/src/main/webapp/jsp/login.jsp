@@ -53,7 +53,7 @@
             <ul class="nav">
                
                 <li>
-                    <a href="/jsp/login.jsp">
+                    <a href="/login">
                         <i class="pe-7s-user"></i>
                         <p>Login</p>
                     </a>
@@ -69,7 +69,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="/jsp/login.jsp">
+                            <a href="/login">
                                 Log in
                             </a>
                         </li>
