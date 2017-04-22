@@ -33,19 +33,24 @@ public class LoginServlet extends HttpServlet {
 		
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-
-		DatabaseConnector db = new DatabaseConnector();
-
-		db.getEntityManager().getTransaction().begin();
-				 
+		DatabaseConnector db;
+		
+		if (this.getServletContext().getAttribute("DATABASECON") == null){
+			db = new DatabaseConnector();
+			this.getServletContext().setAttribute("DATABASECON", db);
+		}else {
+			db = (DatabaseConnector) this.getServletContext().getAttribute("DATABASECON");
+		}
+		
+		db.getEntityManager().getTransaction().begin();	 
 		Query query = db.getEntityManager().createNativeQuery(
 				"Select password from user where username = '" + username
 						+ "'");
 		String pwd = (String) query.getSingleResult();
 		db.getEntityManager().getTransaction().commit();
-
+		
 		if (pwd.equals(password)) {
-            // set Context User
+			this.getServletContext().setAttribute("USERNAME", username);
 			resp.sendRedirect(req.getContextPath()+ "/tracker");
 		}else{
 				// ToDo
