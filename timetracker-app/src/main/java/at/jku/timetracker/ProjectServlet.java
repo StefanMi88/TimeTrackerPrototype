@@ -53,22 +53,21 @@ public class ProjectServlet extends HttpServlet {
 		
 		db.getEntityManager().getTransaction().begin();	 
 		Query query = db.getEntityManager().createNativeQuery(
-				"Select desc from user where name = '" + name
-						+ "'");
-		String pwd = (String) query.getSingleResult();
+				"Select description from project where name = '" + name + "'");
+		String description = (String) query.getSingleResult();
 		db.getEntityManager().getTransaction().commit();
 		
-		if (pwd.equals(desc)) {
-			this.getServletContext().setAttribute("USERNAME", name);
+		if (description.equals(desc)) {
+			this.getServletContext().setAttribute("NAME", name);
 			resp.sendRedirect(req.getContextPath()+ "/tracker");
 		}else{
 				// ToDo
 				// auf Fehler Page verweisen 
 				try {
-					throw new Exception("Wrong Password:" + pwd + desc);
+					throw new Exception("Wrong Password:" + description + desc);
 				} catch (Exception e) {
 					e.printStackTrace();
-					String nextJSP = "/login";
+					String nextJSP = "/project";
 					RequestDispatcher dispatcher = getServletContext()
 							.getRequestDispatcher(nextJSP);
 					dispatcher.forward(req, resp);
