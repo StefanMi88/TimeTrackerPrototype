@@ -6,20 +6,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="USER")
+@Table(name = "USER")
 public class User {
 
 	@Id
 	@Column(name = "USERNAME")
 	private String username;
-	
+
 	@Column(name = "PASSWORD")
 	private String password;
-	
+
 	@Column(name = "TYPE")
 	private String type;
 
-	
 	public User() {
 		super();
 	}
@@ -54,5 +53,4 @@ public class User {
 		this.type = type;
 	}
 
-	    
 }

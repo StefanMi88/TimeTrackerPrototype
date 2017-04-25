@@ -20,49 +20,46 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-			String nextJSP = "/jsp/login.jsp";
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-			dispatcher.forward(req, resp);
-		
+		String nextJSP = "/jsp/login.jsp";
+		RequestDispatcher dispatcher = getServletContext()
+				.getRequestDispatcher(nextJSP);
+		dispatcher.forward(req, resp);
+
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		DatabaseConnector db;
-		
-		if (this.getServletContext().getAttribute("DATABASECON") == null){
+
+		if (this.getServletContext().getAttribute("DATABASECON") == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute("DATABASECON", db);
-		}else {
-			db = (DatabaseConnector) this.getServletContext().getAttribute("DATABASECON");
+		} else {
+			db = (DatabaseConnector) this.getServletContext().getAttribute(
+					"DATABASECON");
 		}
-		
-		db.getEntityManager().getTransaction().begin();	 
+
+		db.getEntityManager().getTransaction().begin();
 		Query query = db.getEntityManager().createNativeQuery(
-				"Select password from user where username = '" + username
+				"Select u.password from user u where u.username = '" + username
 						+ "'");
 		String pwd = (String) query.getSingleResult();
 		db.getEntityManager().getTransaction().commit();
-		
+
 		if (pwd.equals(password)) {
 			this.getServletContext().setAttribute("USERNAME", username);
-			resp.sendRedirect(req.getContextPath()+ "/tracker");
-		}else{
-				// ToDo
-				// auf Fehler Page verweisen 
-				try {
-					throw new Exception("Wrong Password:" + pwd + password);
-				} catch (Exception e) {
-					e.printStackTrace();
-					String nextJSP = "/login";
-					RequestDispatcher dispatcher = getServletContext()
-							.getRequestDispatcher(nextJSP);
-					dispatcher.forward(req, resp);
-				}
+			resp.sendRedirect(req.getContextPath() + "/tracker");
+		} else {
+			req.setAttribute("errorMessage", "Falscher Username/Passwort!");
+			String nextJSP = "/jsp/login.jsp";
+			RequestDispatcher dispatcher = getServletContext()
+					.getRequestDispatcher(nextJSP);
+			dispatcher.forward(req, resp);
+
 		}
 	}
 

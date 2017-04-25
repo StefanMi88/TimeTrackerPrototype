@@ -105,7 +105,11 @@
 												Login
 											</button>
                                         </div>
+                                         <div class="control-group error">
+      										<span class="help-inline">${errorMessage}</span>
+    									</div>
                                     </div>
+                                    
                                 </form>
 								
                                 <br />

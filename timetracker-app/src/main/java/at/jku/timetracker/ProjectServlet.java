@@ -14,7 +14,7 @@ import at.jku.timetracker.database.DatabaseConnector;
 import at.jku.timetracker.model.User;
 
 @WebServlet(name = "ProjectServlet", urlPatterns = { "/project" })
-public class ProjectServlet extends HttpServlet{
+public class ProjectServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
