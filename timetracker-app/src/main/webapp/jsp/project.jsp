@@ -45,32 +45,32 @@
 
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="/tracker" class="simple-text">
+                <a href="tracker" class="simple-text">
                     Time Tracker
                 </a>
             </div>
 
             <ul class="nav">
                 <li class="active">
-                    <a href="/tracker">
+                    <a href="tracker">
                         <i class="pe-7s-timer"></i>
                         <p>Track Time</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/dashboard">
+                    <a href="dashboard">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/project">
+                    <a href="project">
                         <i class="pe-7s-note2"></i>
                         <p>Projects</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/user">
+                    <a href="user">
                         <i class="pe-7s-user"></i>
                         <p>Users</p>
                     </a>
@@ -114,18 +114,18 @@
                                 <p class="category">Enter settings and click create button</p>
                             </div>
                             <div class="content">
-                                <form method="post" action="#">
+                               	<form method="post" action="project">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label for="name" >Name:</label>
-                                            <input class="" type="text" id="name">
+                                            <input class="" type="text" name="name" id="name">
                                         </div>
                                         <div class="col-md-7">
                                             <label for="desc">Description:</label>
-                                            <input type="text" id="desc" size="60">
+                                            <input type="text" name="desc" id="desc" size="60">
                                         </div>
                                         <div class="col-md-2">
-                                            <button class="btn btn-warning btn-fill btn-sm">Create</button>
+                                            <button type="submit" class="btn btn-warning btn-fill btn-sm">Create</button>
                                         </div>
                                     </div>
                                 </form>

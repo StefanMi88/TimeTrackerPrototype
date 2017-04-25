@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import at.jku.timetracker.database.DatabaseConnector;
 import at.jku.timetracker.model.User;
 
-@WebServlet(name = "LoginServlet", urlPatterns = { "/login" })
+@WebServlet(name = "LoginServlet", urlPatterns = { "/login", "/Login" })
 public class LoginServlet extends HttpServlet {
 
 	@Override
@@ -21,8 +21,7 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 			String nextJSP = "/jsp/login.jsp";
-			RequestDispatcher dispatcher = getServletContext()
-					.getRequestDispatcher(nextJSP);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 			dispatcher.forward(req, resp);
 		
 	}

@@ -53,7 +53,7 @@
             <ul class="nav">
                
                 <li>
-                    <a href="/login">
+                    <a href="login">
                         <i class="pe-7s-user"></i>
                         <p>Login</p>
                     </a>
@@ -69,7 +69,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="/login">
+                            <a href="login">
                                 Log in
                             </a>
                         </li>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="content">
                                 
-								<form method="post" action="/login">
+								<form method="post" action="login">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label for="name" >Username:</label>
