@@ -1,3 +1,7 @@
+<%@page import="at.jku.timetracker.database.DatabaseConnector"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="at.jku.timetracker.model.Project"%>
+<%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,7 +36,17 @@
 
 </head>
 <body>
+<%
+	DatabaseConnector db;
+	
+	if (request.getServletContext().getAttribute("DATABASECON") == null) {
+		db = new DatabaseConnector();
+		request.getServletContext().setAttribute("DATABASECON", db);
+	} else {
+		db = (DatabaseConnector) this.getServletContext().getAttribute("DATABASECON");
+	}
 
+%>
 <div class="wrapper">
     <div class="sidebar" data-color="orange" data-image="img/sidebar-5.jpg">
 
@@ -148,27 +162,57 @@
                                         <th>Add</th>
                                     </thead>
                                     <tbody>
+<%
+	try {
+		db.getEntityManager().getTransaction().begin();	 
+		Query query = db.getEntityManager().createNativeQuery("Select * from project p", Project.class);
+		List<Project> values = query.getResultList();
+		
+		if (values != null)
+		{
+			//out.println(values.size());
+			 //Display values
+			for (Project prj : values) {
+				out.println("<tr>");
+	            out.println("<td>" + prj.getId() + "</td>");
+	            out.println("<td>" + prj.getName() + "</td>");
+	            out.println("<td>" + prj.getDescription() + "</td>");	            
+	            out.println("<td><a href=\"project?projectId="+ prj.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            out.println("</tr>");
+			}
+		}
+		
+	}
+	catch (Exception ex) {
+		 out.println(ex.getMessage());
+	}
+ 	finally
+ 	{
+ 		db.getEntityManager().getTransaction().commit();
+ 	}
+%>
                                         <tr>
                                         	<td>1</td>
                                         	<td>Project A</td>
                                         	<td>Sample Project A</td>
-                                            <td><a href="edit_project.html" title="Add"><span class="pe-7s-edit"></span></a></td>
+                                            <td><a href="project?projectId=1" title="Add"><span class="pe-7s-edit"></span></a></td>
                                         </tr>
                                         <tr>
                                         	<td>2</td>
                                         	<td>Project B</td>
                                         	<td>Sample Project B</td>
-                                            <td><a href="edit_project.html" title="Add"><span class="pe-7s-edit"></span></a></td>
+                                            <td><a href="edit_project.jsp" title="Add"><span class="pe-7s-edit"></span></a></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>Off Project</td>
                                             <td>Use this if not working on any project</td>
-                                            <td><a href="edit_project.html" title="Add"><span class="pe-7s-edit"></span></a></td>
+                                            <td><a href="edit_project.jsp" title="Add"><span class="pe-7s-edit"></span></a></td>
                                         </tr>
                                     </tbody>
                                 </table>
-
+								 
+                                    <%=request.getContextPath()%>
                             </div>
                         </div>
                     </div>

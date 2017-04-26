@@ -29,12 +29,6 @@ public class Project {
 		this.name = name;
 		this.description = description;
 	}
-	
-	public Project(String name, String description) {
-		this.id = getNextId();
-		this.name = name;
-		this.description = description;
-	}
 
 	public String getName() {
 		return name;
@@ -60,7 +54,4 @@ public class Project {
 		this.id = id;
 	}
 	
-	private int getNextId() {
-		return 1;
-	}
 }
