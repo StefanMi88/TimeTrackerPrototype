@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import at.jku.timetracker.database.DatabaseConnector;
-import at.jku.timetracker.model.User;
 
 @WebServlet(name = "ProjectServlet", urlPatterns = { "/project" })
 public class ProjectServlet extends HttpServlet {
@@ -20,6 +19,11 @@ public class ProjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		if (this.getServletContext().getAttribute("USERNAME") == null) {
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
+		
 		DatabaseConnector db;
 		
 		if (this.getServletContext().getAttribute("DATABASECON") == null) {

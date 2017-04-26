@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import at.jku.timetracker.database.DatabaseConnector;
-import at.jku.timetracker.model.User;
 
 @WebServlet(name = "LoginServlet", urlPatterns = { "/login", "/Login" })
 public class LoginServlet extends HttpServlet {
@@ -19,7 +18,8 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
+		
+		this.getServletContext().setAttribute("USERNAME", null);
 		String nextJSP = "/jsp/login.jsp";
 		RequestDispatcher dispatcher = getServletContext()
 				.getRequestDispatcher(nextJSP);
