@@ -43,34 +43,35 @@
 
         -->
 
+        
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="/tracker" class="simple-text">
+                <a href="/timetracker-app/tracker" class="simple-text">
                     Time Tracker
                 </a>
             </div>
 
             <ul class="nav">
-                <li class="active">
-                    <a href="/tracker">
+                <li>
+                    <a href="/timetracker-app/tracker">
                         <i class="pe-7s-timer"></i>
                         <p>Track Time</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/dashboard">
+                    <a href="/timetracker-app/dashboard">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/project">
+                    <a href="/timetracker-app/project">
                         <i class="pe-7s-note2"></i>
                         <p>Projects</p>
                     </a>
                 </li>
-                <li>
-                    <a href="/user">
+                <li class="active">
+                    <a href="/timetracker-app/user">
                         <i class="pe-7s-user"></i>
                         <p>Users</p>
                     </a>
@@ -104,7 +105,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="/timetracker-app/login">
                                 Log out
                             </a>
                         </li>

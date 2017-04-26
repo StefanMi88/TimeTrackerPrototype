@@ -5,7 +5,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class DatabaseConnector {
-
 	private EntityManager entityManager;
 
 	public DatabaseConnector() {
@@ -20,5 +19,4 @@ public class DatabaseConnector {
 
 		return this.entityManager;
 	}
-
 }

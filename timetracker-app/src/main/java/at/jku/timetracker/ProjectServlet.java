@@ -21,6 +21,11 @@ public class ProjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		if (this.getServletContext().getAttribute("USERNAME") == null) {
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
+		
 		DatabaseConnector db;
 		
 		if (this.getServletContext().getAttribute("DATABASECON") == null) {

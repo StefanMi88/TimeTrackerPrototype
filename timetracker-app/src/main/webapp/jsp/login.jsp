@@ -45,7 +45,7 @@
 
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="/jsp/tracker.jsp" class="simple-text">
+                <a href="/timetracker-app/tracker" class="simple-text">
                     Time Tracker
                 </a>
             </div>
@@ -53,7 +53,7 @@
             <ul class="nav">
                
                 <li>
-                    <a href="login">
+                    <a href="/timetracker-app/login">
                         <i class="pe-7s-user"></i>
                         <p>Login</p>
                     </a>
@@ -68,8 +68,8 @@
                 
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="login">
+                        <li class="active">
+                            <a href="/timetracker-app/login">
                                 Log in
                             </a>
                         </li>
