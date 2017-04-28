@@ -46,32 +46,32 @@
        
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="/timetracker-app/tracker" class="simple-text">
+                <a href="tracker" class="simple-text">
                     Time Tracker
                 </a>
             </div>
 
             <ul class="nav">
                 <li>
-                    <a href="/timetracker-app/tracker">
+                    <a href="tracker">
                         <i class="pe-7s-timer"></i>
                         <p>Track Time</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/timetracker-app/dashboard">
+                    <a href="dashboard">
                         <i class="pe-7s-graph"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="active">
-                    <a href="/timetracker-app/project">
+                    <a href="project">
                         <i class="pe-7s-note2"></i>
                         <p>Projects</p>
                     </a>
                 </li>
                 <li>
-                    <a href="/timetracker-app/user">
+                    <a href="user">
                         <i class="pe-7s-user"></i>
                         <p>Users</p>
                     </a>
@@ -95,7 +95,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="/timetracker-app/login">
+                            <a href="login">
                                 Log out
                             </a>
                         </li>

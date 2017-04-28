@@ -45,7 +45,7 @@
 
         <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="/timetracker-app/tracker" class="simple-text">
+                <a href="tracker" class="simple-text">
                     Time Tracker
                 </a>
             </div>
@@ -53,7 +53,7 @@
             <ul class="nav">
                
                 <li>
-                    <a href="/timetracker-app/login">
+                    <a href="login">
                         <i class="pe-7s-user"></i>
                         <p>Login</p>
                     </a>
@@ -69,7 +69,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active">
-                            <a href="/timetracker-app/login">
+                            <a href="login">
                                 Log in
                             </a>
                         </li>
