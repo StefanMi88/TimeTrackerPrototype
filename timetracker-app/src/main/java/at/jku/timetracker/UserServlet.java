@@ -82,7 +82,7 @@ public class UserServlet extends HttpServlet {
 				+ " u.email = ?, "
 				+ " u.aboutme = ?"
 				+ " where u.username = ?");
-		String username = req.getParameter("company");
+
 		updateUserQuery.setParameter(1, req.getParameter("firstname"));
 		updateUserQuery.setParameter(2, req.getParameter("country"));
 		updateUserQuery.setParameter(3, req.getParameter("lastname"));

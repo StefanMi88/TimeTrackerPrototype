@@ -1,3 +1,4 @@
+<%@page import="org.apache.openjpa.jdbc.kernel.exps.ToUpperCase"%>
 <%@page import="at.jku.timetracker.model.User"%>
 <%@page import="at.jku.timetracker.TimeTracker"%>
 <!doctype html>
@@ -135,48 +136,73 @@
                                 <h4 class="title">New User</h4>
                             </div>
                             <div class="content">
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-5">
+                                <form method="post" action="newuser">
+                                	<div class="row">
+										<div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Company (disabled)</label>
-                                                <input type="text" class="form-control" placeholder="Company" value="">
+                                                <label>Username</label>
+                                                <input type="text" class="form-control" placeholder="Username" name="username" id="username" value='<%=request.getAttribute("username")%>'>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Password</label>
+                                                <input type="password" class="form-control" name="password" id="password" value='<%=request.getAttribute("password")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Username</label>
-                                                <input type="text" class="form-control" placeholder="Username" value="">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" class="form-control" placeholder="Email" value="">
+                                                <label>Type</label>
+                                                <select class="form-control" name="type" id="type" >
+                                                        <option value="USER" selected="<% 
+                                                        	if (request.getAttribute("type").equals("USER")){
+                                                        		out.println("selected");
+                                                        }else {
+                                                        	out.println("");
+                                                        }  %>">Normal User</option>
+                                                        <option value="ADMIN" selected="<% 
+                                                        	if (request.getAttribute("type").equals("ADMIN")){
+                                                        		out.println("selected");
+                                                        }else {
+                                                        	out.println("");
+                                                        }  %>">Admin</option>
+                                               </select>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>First Name</label>
-                                                <input type="text" class="form-control" placeholder="Company" value="">
+                                                <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname" value='<%=request.getAttribute("firstname")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Last Name</label>
-                                                <input type="text" class="form-control" placeholder="Last Name" value="">
+                                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname" value='<%=request.getAttribute("lastname")%>'>
                                             </div>
                                         </div>
                                     </div>
-
+									<div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Company</label>
+                                                <input type="text" class="form-control" placeholder="Company" name="company" id="company" value='<%=request.getAttribute("company")%>'>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Email address</label>
+                                                <input type="email" class="form-control" placeholder="Email" name="email" id="email" value='<%=request.getAttribute("email")%>'>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Address</label>
-                                                <input type="text" class="form-control" placeholder="Home Address" value="">
+                                                <input type="text" class="form-control" placeholder="Home Address" name="address" id="address" value='<%=request.getAttribute("address")%>'>
                                             </div>
                                         </div>
                                     </div>
@@ -185,19 +211,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>City</label>
-                                                <input type="text" class="form-control" placeholder="City" value="">
+                                                <input type="text" class="form-control" placeholder="City" name="city" id="city" value='<%=request.getAttribute("city")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <input type="text" class="form-control" placeholder="Country" value="">
+                                                <input type="text" class="form-control" placeholder="Country" name="country" id="country" value='<%=request.getAttribute("country")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Postal Code</label>
-                                                <input type="number" class="form-control" placeholder="ZIP Code" value="">
+                                                <input type="text" class="form-control" placeholder="ZIP Code" name="zip" id="zip" value='<%=request.getAttribute("zip")%>'>
                                             </div>
                                         </div>
                                     </div>
@@ -206,45 +232,19 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>About Me</label>
-                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" value="Mike"></textarea>
+                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" name="aboutme" id="aboutme"><%=request.getAttribute("aboutme")%></textarea>
                                             </div>
                                         </div>
                                     </div>
-
+									<div class="control-group error">
+      										<span class="help-inline"><%=request.getAttribute("errorMessage")%></span>
+    								</div>
                                     <button type="submit" class="btn btn-info btn-fill pull-right">Create User</button>
                                     <div class="clearfix"></div>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card card-user">
-                            <div class="image">
-                                <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400" alt="..."/>
-                            </div>
-                            <div class="content">
-                                <div class="author">
-                                     <a href="#">
-                                    <img class="avatar border-gray" src="img/faces/face-0.jpg" alt="..."/>
-
-                                      <h4 class="title"><br />
-                                         <small></small>
-                                      </h4>
-                                    </a>
-                                </div>
-                                <p class="description text-center"> 
-                                </p>
-                            </div>
-                            <hr>
-                            <div class="text-center">
-                                <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
-                                <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
-                                <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
-
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
