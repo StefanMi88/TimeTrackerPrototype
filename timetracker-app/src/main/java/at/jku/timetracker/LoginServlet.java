@@ -2,6 +2,7 @@ package at.jku.timetracker;
 
 import java.io.IOException;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+
 		req.setAttribute("errorMessage", "");
 		this.getServletContext().setAttribute(TimeTracker.User, null);
 		String nextJSP = "/jsp/login.jsp";
@@ -45,18 +46,31 @@ public class LoginServlet extends HttpServlet {
 					TimeTracker.DBConnector);
 		}
 
+		User u = null;
 		db.getEntityManager().getTransaction().begin();
 		Query selectUserQuery = db.getEntityManager().createNativeQuery(
 				"Select * from user u where u.username = ?", User.class);
 		selectUserQuery.setParameter(1, username);
-		User u = (User) selectUserQuery.getSingleResult();
+		try {
+			u = (User) selectUserQuery.getSingleResult();
+		} catch (NoResultException ex) {
+			
+			db.getEntityManager().getTransaction().commit();
+			req.setAttribute("errorMessage", "User existiert nicht!!");
+			String nextJSP = "/jsp/login.jsp";
+			RequestDispatcher dispatcher = getServletContext()
+					.getRequestDispatcher(nextJSP);
+			dispatcher.forward(req, resp);
+			return;
+		}
+		
 		db.getEntityManager().getTransaction().commit();
 
 		if (u.getPassword().equals(password)) {
 			this.getServletContext().setAttribute(TimeTracker.User, u);
 			resp.sendRedirect(req.getContextPath() + "/tracker");
 		} else {
-			req.setAttribute("errorMessage", "Falscher Username/Passwort!");
+			req.setAttribute("errorMessage", "Falsches Passwort!");
 			String nextJSP = "/jsp/login.jsp";
 			RequestDispatcher dispatcher = getServletContext()
 					.getRequestDispatcher(nextJSP);

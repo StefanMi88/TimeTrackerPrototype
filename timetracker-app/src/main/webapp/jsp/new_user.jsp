@@ -1,3 +1,5 @@
+<%@page import="at.jku.timetracker.model.User"%>
+<%@page import="at.jku.timetracker.TimeTracker"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -95,7 +97,16 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="newuser">
+                            <a href="newuser" class="<%
+                            
+                            User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+                            if (u.getType().toLowerCase().equals("admin")){
+                            	 out.println("");
+                            }else{
+                            	 out.println("hidden");
+                            }
+                           
+                            %>">
                                 New User
                             </a>
                         </li>
