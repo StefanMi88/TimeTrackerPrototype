@@ -18,10 +18,132 @@ public class User {
 
 	@Column(name = "TYPE")
 	private String type;
+	
+	@Column(name = "CITY")
+	private String city;
+	
+	@Column(name = "FIRSTNAME")
+	private String firstName;
+	
+	@Column(name = "LASTNAME")
+	private String lastName;
 
+	@Column(name = "ADDRESS")
+	private String address;
+	
+	@Column(name = "ZIP")
+	private String zip;
+	
+	@Column(name = "ABOUTME")
+	private String aboutMe;
+	
+	@Column(name = "COMPANY")
+	private String company;
+	
+	@Column(name = "EMAIL")
+	private String email;
+	
 	public User() {
 		super();
 	}
+
+	public User(String username, String password, String type, String city,
+			String firstName, String lastName, String address, String zip,
+			String aboutMe, String company, String email) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.type = type;
+		this.city = city;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.zip = zip;
+		this.aboutMe = aboutMe;
+		this.company = company;
+		this.email = email;
+	}
+
+
+	public String getCity() {
+		return city;
+	}
+
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
+	public String getZip() {
+		return zip;
+	}
+
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+
+	public String getAboutMe() {
+		return aboutMe;
+	}
+
+
+	public void setAboutMe(String aboutMe) {
+		this.aboutMe = aboutMe;
+	}
+
+
+	public String getCompany() {
+		return company;
+	}
+
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 
 	public User(String username, String password, String type) {
 		this.username = username;

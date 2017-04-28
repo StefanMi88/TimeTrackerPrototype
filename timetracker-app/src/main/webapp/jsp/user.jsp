@@ -129,19 +129,19 @@
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label>Company</label>
-                                                <input type="text" class="form-control" placeholder="Company" name="company" id="company">
+                                                <input type="text" class="form-control" placeholder="Company" name="company" id="company" value='<%=request.getAttribute("company")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input type="text" class="form-control" placeholder="Username" name="username" id="username">
+                                                <input type="text" class="form-control" placeholder="Username" name="username" id="username" value='<%=request.getAttribute("username")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" class="form-control" placeholder="Email" name="email" id="email">
+                                                <input type="email" class="form-control" placeholder="Email" name="email" id="email" value='<%=request.getAttribute("email")%>'>
                                             </div>
                                         </div>
                                     </div>
@@ -150,13 +150,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>First Name</label>
-                                                <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname">
+                                                <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname" value='<%=request.getAttribute("firstname")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Last Name</label>
-                                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname">
+                                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname" value='<%=request.getAttribute("lastname")%>'>
                                             </div>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Address</label>
-                                                <input type="text" class="form-control" placeholder="Home Address" name="address" id="address">
+                                                <input type="text" class="form-control" placeholder="Home Address" name="address" id="address" value='<%=request.getAttribute("address")%>'>
                                             </div>
                                         </div>
                                     </div>
@@ -174,19 +174,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>City</label>
-                                                <input type="text" class="form-control" placeholder="City" name="city" id="city">
+                                                <input type="text" class="form-control" placeholder="City" name="city" id="city" value='<%=request.getAttribute("city")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <input type="text" class="form-control" placeholder="Country" name="country" id="country">
+                                                <input type="text" class="form-control" placeholder="Country" name="country" id="country" value='<%=request.getAttribute("country")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Postal Code</label>
-                                                <input type="number" class="form-control" placeholder="ZIP Code" name="zip" id="zip">
+                                                <input type="number" class="form-control" placeholder="ZIP Code" name="zip" id="zip" value='<%=request.getAttribute("zip")%>'>
                                             </div>
                                         </div>
                                     </div>
@@ -195,7 +195,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>About Me</label>
-                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" name="aboutme" id="aboutme"></textarea>
+                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" name="aboutme" id="aboutme" value='<%=request.getAttribute("aboutme")%>'></textarea>
                                             </div>
                                         </div>
                                     </div>
