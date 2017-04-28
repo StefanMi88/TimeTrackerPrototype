@@ -89,7 +89,6 @@ public class NewUserServlet extends HttpServlet{
 		req.setAttribute("email", email);
 		req.setAttribute("aboutme", aboutme);
 		req.setAttribute("username", username);
-		
 		req.setAttribute("username", username);
 		req.setAttribute("password", password);
 		req.setAttribute("type", type);
