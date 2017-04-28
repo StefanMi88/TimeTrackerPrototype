@@ -106,7 +106,7 @@
 											</button>
                                         </div>
                                          <div class="control-group error">
-      										<span class="help-inline">${errorMessage}</span>
+      										<span class="help-inline"><%=request.getAttribute("errorMessage")%></span>
     									</div>
                                     </div>
                                     

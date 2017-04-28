@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import at.jku.timetracker.database.DatabaseConnector;
+import at.jku.timetracker.model.User;
 
 @WebServlet(name = "LoginServlet", urlPatterns = { "/login", "/Login" })
 public class LoginServlet extends HttpServlet {
@@ -19,7 +20,8 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		this.getServletContext().setAttribute("USERNAME", null);
+		req.setAttribute("errorMessage", "");
+		this.getServletContext().setAttribute(TimeTracker.User, null);
 		String nextJSP = "/jsp/login.jsp";
 		RequestDispatcher dispatcher = getServletContext()
 				.getRequestDispatcher(nextJSP);
@@ -35,23 +37,23 @@ public class LoginServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		DatabaseConnector db;
 
-		if (this.getServletContext().getAttribute("DATABASECON") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
-			this.getServletContext().setAttribute("DATABASECON", db);
+			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
 		} else {
 			db = (DatabaseConnector) this.getServletContext().getAttribute(
-					"DATABASECON");
+					TimeTracker.DBConnector);
 		}
 
 		db.getEntityManager().getTransaction().begin();
-		Query query = db.getEntityManager().createNativeQuery(
-				"Select u.password from user u where u.username = '" + username
-						+ "'");
-		String pwd = (String) query.getSingleResult();
+		Query selectUserQuery = db.getEntityManager().createNativeQuery(
+				"Select * from user u where u.username = ?", User.class);
+		selectUserQuery.setParameter(1, username);
+		User u = (User) selectUserQuery.getSingleResult();
 		db.getEntityManager().getTransaction().commit();
 
-		if (pwd.equals(password)) {
-			this.getServletContext().setAttribute("USERNAME", username);
+		if (u.getPassword().equals(password)) {
+			this.getServletContext().setAttribute(TimeTracker.User, u);
 			resp.sendRedirect(req.getContextPath() + "/tracker");
 		} else {
 			req.setAttribute("errorMessage", "Falscher Username/Passwort!");

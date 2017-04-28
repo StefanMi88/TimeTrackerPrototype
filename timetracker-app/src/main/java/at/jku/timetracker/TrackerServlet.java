@@ -18,19 +18,19 @@ public class TrackerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		if (this.getServletContext().getAttribute("USERNAME") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.User) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 
 		DatabaseConnector db;
 
-		if (this.getServletContext().getAttribute("DATABASECON") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
-			this.getServletContext().setAttribute("DATABASECON", db);
+			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
 		} else {
 			db = (DatabaseConnector) this.getServletContext().getAttribute(
-					"DATABASECON");
+					TimeTracker.DBConnector);
 		}
 
 		String nextJSP = "/jsp/tracker.jsp";

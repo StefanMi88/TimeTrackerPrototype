@@ -43,27 +43,12 @@ public class User {
 	@Column(name = "EMAIL")
 	private String email;
 	
+	@Column(name = "COUNTRY")
+	private String country;
+	
 	public User() {
 		super();
 	}
-
-	public User(String username, String password, String type, String city,
-			String firstName, String lastName, String address, String zip,
-			String aboutMe, String company, String email) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.type = type;
-		this.city = city;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.address = address;
-		this.zip = zip;
-		this.aboutMe = aboutMe;
-		this.company = company;
-		this.email = email;
-	}
-
 
 	public String getCity() {
 		return city;
@@ -174,5 +159,33 @@ public class User {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public User(String username, String password, String type, String city,
+			String firstName, String lastName, String address, String zip,
+			String aboutMe, String company, String email, String country) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.type = type;
+		this.city = city;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.zip = zip;
+		this.aboutMe = aboutMe;
+		this.company = company;
+		this.email = email;
+		this.country = country;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	
+	
 
 }

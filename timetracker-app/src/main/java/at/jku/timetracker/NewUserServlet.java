@@ -16,7 +16,7 @@ public class NewUserServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		if (this.getServletContext().getAttribute("USERNAME") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.User) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}

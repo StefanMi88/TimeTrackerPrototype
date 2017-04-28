@@ -1,3 +1,4 @@
+<%@page import="at.jku.timetracker.TimeTracker"%>
 <%@page import="at.jku.timetracker.database.DatabaseConnector"%>
 <%@page import="javax.persistence.Query"%>
 <%@page import="at.jku.timetracker.model.Project"%>
@@ -39,11 +40,11 @@
 <%
 	DatabaseConnector db;
 	
-	if (request.getServletContext().getAttribute("DATABASECON") == null) {
+	if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 		db = new DatabaseConnector();
-		request.getServletContext().setAttribute("DATABASECON", db);
+		request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
 	} else {
-		db = (DatabaseConnector) this.getServletContext().getAttribute("DATABASECON");
+		db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
 	}
 
 %>

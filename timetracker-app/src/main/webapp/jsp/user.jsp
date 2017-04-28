@@ -135,7 +135,7 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input type="text" class="form-control" placeholder="Username" name="username" id="username" value='<%=request.getAttribute("username")%>'>
+                                                <input type="text" disabled="disabled" class="form-control" placeholder="Username" name="username" id="username" value='<%=request.getAttribute("username")%>'>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -195,7 +195,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>About Me</label>
-                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" name="aboutme" id="aboutme" value='<%=request.getAttribute("aboutme")%>'></textarea>
+                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" name="aboutme" id="aboutme"><%=request.getAttribute("aboutme")%></textarea>
                                             </div>
                                         </div>
                                     </div>

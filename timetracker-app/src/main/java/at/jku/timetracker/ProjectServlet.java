@@ -21,18 +21,18 @@ public class ProjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		if (this.getServletContext().getAttribute("USERNAME") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.User) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		
 		DatabaseConnector db;
 		
-		if (this.getServletContext().getAttribute("DATABASECON") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
-			this.getServletContext().setAttribute("DATABASECON", db);
+			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
 		} else {
-			db = (DatabaseConnector) this.getServletContext().getAttribute("DATABASECON");
+			db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
 		}
 		
 		String projectId = req.getParameter("projectId");
@@ -55,11 +55,11 @@ public class ProjectServlet extends HttpServlet {
 		String desc = req.getParameter("desc");
 		DatabaseConnector db;
 		
-		if (this.getServletContext().getAttribute("DATABASECON") == null){
+		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null){
 			db = new DatabaseConnector();
-			this.getServletContext().setAttribute("DATABASECON", db);
+			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
 		}else {
-			db = (DatabaseConnector) this.getServletContext().getAttribute("DATABASECON");
+			db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
 		}
 		
 		db.getEntityManager().getTransaction().begin();	 
