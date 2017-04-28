@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 13. Apr 2017 um 10:07
+-- Erstellungszeit: 28. Apr 2017 um 09:31
 -- Server-Version: 10.1.21-MariaDB
 -- PHP-Version: 7.1.1
 
@@ -26,18 +26,29 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `username` varchar(30) NOT NULL,
   `password` varchar(30) NOT NULL,
-  `type` varchar(20) NOT NULL
+  `type` varchar(20) NOT NULL,
+  `company` varchar(30) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `firstname` varchar(30) NOT NULL,
+  `lastname` varchar(30) NOT NULL,
+  `address` varchar(50) NOT NULL,
+  `city` varchar(30) NOT NULL,
+  `country` varchar(30) NOT NULL,
+  `zip` varchar(5) NOT NULL,
+  `aboutme` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `user`
 --
 
-INSERT INTO `user` (`username`, `password`, `type`) VALUES
-('admin', 'admin', 'admin');
+INSERT INTO `user` (`username`, `password`, `type`, `company`, `email`, `firstname`, `lastname`, `address`, `city`, `country`, `zip`, `aboutme`) VALUES
+('max1', 'admin', 'admin', '', '', '', '', '', '', '', '', ''),
+('admin', 'admin', 'admin', 'jku', 'jku@gmail', 'admin', 'admin', 'linz 3', 'linz', 'austria', '4710', 'Administrator');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
