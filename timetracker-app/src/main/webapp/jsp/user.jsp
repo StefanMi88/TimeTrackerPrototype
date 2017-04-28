@@ -95,12 +95,12 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="new_user.html">
+                            <a href="newuser">
                                 New User
                             </a>
                         </li>
 						<li>
-                            <a href="user.html">
+                            <a href="user">
                                 Account
                             </a>
                         </li>
@@ -124,24 +124,24 @@
                                 <h4 class="title">Edit Profile</h4>
                             </div>
                             <div class="content">
-                                <form>
+                                <form method="post" action="user">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <label>Company (disabled)</label>
-                                                <input type="text" class="form-control" placeholder="Company" value="Austria Wien">
+                                                <label>Company</label>
+                                                <input type="text" class="form-control" placeholder="Company" name="company" id="company">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input type="text" class="form-control" placeholder="Username" value="toni64">
+                                                <input type="text" class="form-control" placeholder="Username" name="username" id="username">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" class="form-control" placeholder="Email" value="toni.polster@gmx.at">
+                                                <input type="email" class="form-control" placeholder="Email" name="email" id="email">
                                             </div>
                                         </div>
                                     </div>
@@ -150,13 +150,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>First Name</label>
-                                                <input type="text" class="form-control" placeholder="Company" value="Toni">
+                                                <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Last Name</label>
-                                                <input type="text" class="form-control" placeholder="Last Name" value="Polster">
+                                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname">
                                             </div>
                                         </div>
                                     </div>
@@ -165,7 +165,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Address</label>
-                                                <input type="text" class="form-control" placeholder="Home Address" value="Schönbrunn 1">
+                                                <input type="text" class="form-control" placeholder="Home Address" name="address" id="address">
                                             </div>
                                         </div>
                                     </div>
@@ -174,19 +174,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>City</label>
-                                                <input type="text" class="form-control" placeholder="City" value="Wien">
+                                                <input type="text" class="form-control" placeholder="City" name="city" id="city">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <input type="text" class="form-control" placeholder="Country" value="Austria">
+                                                <input type="text" class="form-control" placeholder="Country" name="country" id="country">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Postal Code</label>
-                                                <input type="number" class="form-control" placeholder="ZIP Code" value="1010">
+                                                <input type="number" class="form-control" placeholder="ZIP Code" name="zip" id="zip">
                                             </div>
                                         </div>
                                     </div>
@@ -195,7 +195,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>About Me</label>
-                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" value="Mike">Software Tester</textarea>
+                                                <textarea rows="5" class="form-control" placeholder="Here can be your description" name="aboutme" id="aboutme"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -225,12 +225,7 @@
                                 </p>
                             </div>
                             <hr>
-                            <div class="text-center">
-                                <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
-                                <button href="#" class="btn btn-simple"><i class="fa fa-twitter"></i></button>
-                                <button href="#" class="btn btn-simple"><i class="fa fa-google-plus-square"></i></button>
-
-                            </div>
+                            
                         </div>
                     </div>
 
