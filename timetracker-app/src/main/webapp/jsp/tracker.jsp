@@ -121,16 +121,16 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <form method="post" action="#">
+                                            <form method="post" action="startTime">
                                                 <td>
-                                                    <select>
+                                                    <select name="project" id="project">
                                                         <option value="projecta">Project A</option>
                                                         <option value="projectb">Project B</option>
                                                         <option value="offproject">Off Project</option>
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select>
+                                                    <select name="task" id="task">
                                                         <option value="sampleTaskf">Sample Task F</option>
                                                         <option value="sampleTaskb">Sample Task B</option>
                                                         <option value="smapleTaskc">Sample Task C</option>
