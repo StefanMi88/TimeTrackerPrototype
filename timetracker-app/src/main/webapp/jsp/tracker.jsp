@@ -1,3 +1,9 @@
+<%@page import="at.jku.timetracker.TimeTracker"%>
+<%@page import="at.jku.timetracker.database.DatabaseConnector"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="at.jku.timetracker.model.Project"%>
+<%@page import="at.jku.timetracker.model.Task"%>
+<%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,7 +38,17 @@
 
 </head>
 <body>
+<%
+	DatabaseConnector db;
+	
+	if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
+		db = new DatabaseConnector();
+		request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
+	} else {
+		db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
+	}
 
+%>
 <div class="wrapper">
     <div class="sidebar" data-color="orange" data-image="img/sidebar-5.jpg">
 
@@ -122,18 +138,60 @@
                                     <tbody>
                                         <tr>
                                             <form method="post" action="startTime">
-                                                <td>
-                                                    <select name="project" id="project">
-                                                        <option value="projecta">Project A</option>
-                                                        <option value="projectb">Project B</option>
-                                                        <option value="offproject">Off Project</option>
-                                                    </select>
+                                                <td>	
+                                                	<select name="project" id="project" >
+                                                        <%
+															try {
+																db.getEntityManager().getTransaction().begin();	 
+																Query query = db.getEntityManager().createNativeQuery("Select * from project p", Project.class);
+																List<Project> values = query.getResultList();
+																
+																if (values != null)
+																{
+																	for (Project prj : values) {
+															            out.println("<option value=" + prj.getId() + ">");
+															            out.println("" + prj.getName() + "</option>");
+																	}
+																}
+																
+															}
+															catch (Exception ex) {
+																 out.println(ex.getMessage());
+															}
+														 	finally
+														 	{
+														 		db.getEntityManager().getTransaction().commit();
+														 	}
+														%>
+                                               		</select>
                                                 </td>
                                                 <td>
                                                     <select name="task" id="task">
-                                                        <option value="sampleTaskf">Sample Task F</option>
-                                                        <option value="sampleTaskb">Sample Task B</option>
-                                                        <option value="smapleTaskc">Sample Task C</option>
+                                                        <%
+															try {
+																String project =request.getParameter("project");
+																db.getEntityManager().getTransaction().begin();	 
+																Query query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																query.setParameter(1, project);
+																List<Task> values = query.getResultList();
+																
+																if (values != null)
+																{
+																	for (Task task : values) {
+															            out.println("<option value=" + task.getId() + ">");
+															            out.println("" + task.getName() + "</option>");
+																	}
+																}
+																
+															}
+															catch (Exception ex) {
+																 out.println(ex.getMessage());
+															}
+														 	finally
+														 	{
+														 		db.getEntityManager().getTransaction().commit();
+														 	}
+														%>
                                                     </select>
                                                 </td>
                                                 <td id="curtime"></td>

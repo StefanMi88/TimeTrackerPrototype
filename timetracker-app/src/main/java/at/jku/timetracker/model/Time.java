@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name="TIME")
 public class Time {
 
-	
+	@Id
 	@Column(name = "TASK_ID")
 	private int task_id;
 	
