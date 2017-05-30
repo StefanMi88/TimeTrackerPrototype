@@ -170,6 +170,9 @@
                                                         <%
 															try {
 																String project =request.getParameter("project");
+																//Test
+																if (project == null) project = "1";
+																
 																db.getEntityManager().getTransaction().begin();	 
 																Query query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
 																query.setParameter(1, project);
