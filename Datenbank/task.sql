@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Apr 2017 um 10:49
+-- Erstellungszeit: 31. Mai 2017 um 00:39
 -- Server-Version: 10.1.21-MariaDB
--- PHP-Version: 7.1.1
+-- PHP-Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -33,6 +33,15 @@ CREATE TABLE `task` (
   `project_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Daten für Tabelle `task`
+--
+
+INSERT INTO `task` (`id`, `name`, `description`, `project_id`, `category_id`) VALUES
+(1, 'Features in Trello erweitern', '', 1, 1),
+(2, 'Code Review', '', 1, 2),
+(3, 'Entwicklung Prototyp', '', 1, 3);
 
 --
 -- Indizes der exportierten Tabellen
