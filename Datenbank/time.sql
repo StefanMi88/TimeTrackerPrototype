@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Apr 2017 um 10:49
+-- Erstellungszeit: 01. Jun 2017 um 01:08
 -- Server-Version: 10.1.21-MariaDB
--- PHP-Version: 7.1.1
+-- PHP-Version: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,10 +27,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `time` (
-  `start` date NOT NULL,
-  `end` date NOT NULL,
+  `task_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `task_id` int(11) NOT NULL
+  `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `end` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `time` (
 -- Indizes für die Tabelle `time`
 --
 ALTER TABLE `time`
-  ADD PRIMARY KEY (`start`,`end`,`user_id`,`task_id`);
+  ADD PRIMARY KEY (`task_id`,`user_id`,`start`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
