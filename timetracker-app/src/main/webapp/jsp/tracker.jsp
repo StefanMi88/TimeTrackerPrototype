@@ -3,6 +3,7 @@
 <%@page import="javax.persistence.Query"%>
 <%@page import="at.jku.timetracker.model.Project"%>
 <%@page import="at.jku.timetracker.model.Task"%>
+<%@page import="at.jku.timetracker.model.Time"%>
 <%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
@@ -171,10 +172,13 @@
 															try {
 																String project =request.getParameter("project");
 																//Test
-																if (project == null) project = "1";
-																
 																db.getEntityManager().getTransaction().begin();	 
-																Query query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																Query query;
+																if (project == null || project.isEmpty())
+																	query = db.getEntityManager().createNativeQuery("Select * from Task t ", Task.class);
+																else
+																	query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																
 																query.setParameter(1, project);
 																List<Task> values = query.getResultList();
 																
@@ -233,6 +237,39 @@
                                         <th>Edit</th>
                                     </thead>
                                     <tbody>
+<%
+	try {
+		db.getEntityManager().getTransaction().begin();	 
+		Query query = db.getEntityManager().createNativeQuery("Select * from time t", Time.class);
+		List<Time> values = query.getResultList();
+		
+		if (values != null)
+		{
+			//out.println(values.size());
+			 //Display values
+			for (Time time : values) {
+				out.println("<tr>");
+				out.println("<td>" + "</td>");
+				out.println("<td>" + "</td>");
+	            out.println("<td>" + time.getTask_id() + "</td>");
+	            out.println("<td>" + time.getStart() + "</td>");
+	            out.println("<td>" + time.getEnd() + "</td>");	  
+	            out.println("<td>" + "</td>");
+	            out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            //out.println("<td><a href=\"project?projectId="+ time.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            out.println("</tr>");
+			}
+		}
+		
+	}
+	catch (Exception ex) {
+		 out.println(ex.getMessage());
+	}
+ 	finally
+ 	{
+ 		db.getEntityManager().getTransaction().commit();
+ 	}
+%>
                                     <tr>
                                         <td>3</td>
                                         <td>Project A</td>

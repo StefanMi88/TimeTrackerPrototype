@@ -1,6 +1,7 @@
 package at.jku.timetracker.model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +20,10 @@ public class Time {
 	private int user_id;
 	
 	@Column(name = "START")
-	private Date start;
+	private Timestamp start;
 	
 	@Column(name = "END")
-	private Date end;
+	private Timestamp end;
 	
 	
 	
@@ -31,7 +32,7 @@ public class Time {
 		super();
 	}
 
-	public Time(int task_id, int user_id, Date start, Date end) {
+	public Time(int task_id, int user_id, Timestamp start, Timestamp end) {
 		super();
 		this.task_id = task_id;
 		this.user_id = user_id;
@@ -55,19 +56,19 @@ public class Time {
 		this.user_id = user_id;
 	}
 
-	public Date getStart() {
+	public Timestamp getStart() {
 		return start;
 	}
 
-	public void setStart(Date start) {
+	public void setStart(Timestamp start) {
 		this.start = start;
 	}
 
-	public Date getEnd() {
+	public Timestamp getEnd() {
 		return end;
 	}
 
-	public void setEnd(Date end) {
+	public void setEnd(Timestamp end) {
 		this.end = end;
 	}
 

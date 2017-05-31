@@ -55,32 +55,74 @@ public class StartTimeServlet extends HttpServlet{
 		try {
 			int taskId = Integer.parseInt(task);
 			
-			Date curtime = null;
+			Timestamp curtime = null;
 		      
 		      if (req.getParameter("curtime") != null && 
 		          !req.getParameter("curtime").equals("")) {
-		    	  curtime = Date.valueOf(req.getParameter("curtime"));
+		    	  curtime = Timestamp.valueOf(req.getParameter("curtime"));
 		      }
 		      else
 		      {
-		    	  java.util.Date utilDate = new java.util.Date();
-		    	  curtime = new java.sql.Date(utilDate.getTime());
+		    	  //java.util.Date utilDate = new java.util.Date();
+		    	  //curtime = new java.sql.Date(utilDate.getTime());
+		    	  curtime =  new java.sql.Timestamp(System.currentTimeMillis());
 		      }
-		    	  
+		   
+		      db.getEntityManager().getTransaction().begin();	
+		    Query querySelect = db.getEntityManager().createNativeQuery("Select * from time t where t.task_id = ? AND t.user_id = ? AND t.end IS NULL", Time.class);
+		    
+		    querySelect.setParameter(1, taskId);
+		    querySelect.setParameter(2, 1);
+			List<Time> values = querySelect.getResultList();
 			
-			Time t = new Time(taskId , 1, curtime, curtime);
-			Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO time (task_id, user_id, start, end) VALUES (?, ?, ?, ?)");
+			 db.getEntityManager().getTransaction().commit();
 			
-			db.getEntityManager().getTransaction().begin();
-			//db.getEntityManager().persist(t);
-			queryInsert.setParameter(1, t.getTask_id());
-			queryInsert.setParameter(2, t.getUser_id());
-			queryInsert.setParameter(3, t.getStart());
-			queryInsert.setParameter(4, t.getEnd());
-			queryInsert.executeUpdate();
+			if (values != null && !values.isEmpty())
+			{
+				for (Time time : values) {
+					time.setEnd(curtime);
+					
+					db.getEntityManager().getTransaction().begin();
+					//Query queryUpdate = db.getEntityManager().createQuery("UPDATE time t SET t.end = "+ time.getEnd() +" where t.task_id = "+ time.getTask_id() +" AND t.user_id = "+ time.getUser_id() + " AND t.start = "+ time.getStart() +"");
+					Query queryUpdate = db.getEntityManager().createNativeQuery("UPDATE time t SET t.end = ? where t.task_id = ? AND t.user_id = ? AND t.start = ?");
+					queryUpdate.setParameter(1, time.getEnd());
+					queryUpdate.setParameter(2, time.getTask_id());
+					queryUpdate.setParameter(3, time.getUser_id());
+					queryUpdate.setParameter(4, time.getStart());					
+					queryUpdate.executeUpdate();
+					db.getEntityManager().getTransaction().commit();
+					
+					break;		            
+				}
+			}
+			else
+			{
+				Time t = new Time(taskId , 1, curtime, null);
+				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO time (task_id, user_id, start, end) VALUES (?, ?, ?, ?)");
+				
+				db.getEntityManager().getTransaction().begin();
+				//db.getEntityManager().persist(t);
+				queryInsert.setParameter(1, t.getTask_id());
+				queryInsert.setParameter(2, t.getUser_id());
+				queryInsert.setParameter(3, t.getStart());
+				queryInsert.setParameter(4, t.getEnd());
+				queryInsert.executeUpdate();
+				db.getEntityManager().getTransaction().commit();
+			}
+		} catch (javax.persistence.NoResultException exNoResult) {
+			// TODO: handle exception
 			db.getEntityManager().getTransaction().commit();
-		} catch (NoResultException ex) {
-		   return;
+		}
+		catch (javax.persistence.NonUniqueResultException exNonUnique) {
+			// TODO: handle exception
+			db.getEntityManager().getTransaction().commit();
+		}
+		catch (java.lang.IllegalStateException exIllegal) {
+			db.getEntityManager().getTransaction().commit();
+		}
+		finally
+		{
+			
 		}
 		
 		resp.sendRedirect(req.getContextPath() + "/tracker");
