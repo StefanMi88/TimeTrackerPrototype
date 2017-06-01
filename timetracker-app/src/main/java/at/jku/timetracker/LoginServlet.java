@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import at.jku.timetracker.database.DatabaseConnector;
 import at.jku.timetracker.model.User;
 
+@SuppressWarnings("serial")
 @WebServlet(name = "LoginServlet", urlPatterns = { "/login", "/Login" })
 public class LoginServlet extends HttpServlet {
 

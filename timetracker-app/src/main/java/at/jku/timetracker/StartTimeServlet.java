@@ -18,6 +18,7 @@ import at.jku.timetracker.model.Project;
 import at.jku.timetracker.model.User;
 import at.jku.timetracker.model.Time;
 
+@SuppressWarnings("serial")
 @WebServlet(name = "StartTimeServlet", urlPatterns = { "/startTime" })
 public class StartTimeServlet extends HttpServlet{
 	

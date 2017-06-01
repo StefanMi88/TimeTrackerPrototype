@@ -86,33 +86,32 @@
                         <div class="card">
                             <div class="header">
                                 <h4 class="title">Login </h4>
-                                <p class="category">Enter your Username and Password</p>
+                                <p class="category">Enter your Username and Password:</p>
                             </div>
-                            <div class="content">
-                                
+                            <div class="content">                             
 								<form method="post" action="login">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <label for="name" >Username:</label>
+                                        <div class="col-md-5">
+                                            <label for="username" >Username:</label>
                                             <input class="" type="text" name="username" id="username">
                                         </div>
                                         <div class="col-md-7">
-                                            <label for="pwd">Password :</label>
-                                            <input type="password" name="password" id="password" size="60">
+                                            <label for="password">Password :</label>
+                                            <input type="password" name="password" id="password">
                                         </div>
-                                        <div class="col-md-2">
-										   <button type="submit" class="btn btn-info">
+                                     </div>
+                                     <div class="row">   
+                                        <div class="col-md-12">
+                                        	<label for="submit"></label> 
+										    <button type="submit" class="btn btn-warning btn-fill" name="submit">
 												Login
 											</button>
                                         </div>
-                                         <div class="control-group error">
+                                     </div>   
+                                        <div class="control-group error">
       										<span class="help-inline"><%=request.getAttribute("errorMessage")%></span>
     									</div>
-                                    </div>
-                                    
-                                </form>
-								
-                                <br />
+                                </form>		
                             </div>
                         </div>
                     </div>
