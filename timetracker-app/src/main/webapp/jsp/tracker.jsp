@@ -1,3 +1,5 @@
+<%@page import="java.util.concurrent.TimeUnit"%>
+<%@page import="com.mysql.jdbc.TimeUtil"%>
 <%@page import="at.jku.timetracker.TimeTracker"%>
 <%@page import="at.jku.timetracker.database.DatabaseConnector"%>
 <%@page import="javax.persistence.Query"%>
@@ -240,14 +242,22 @@
 		{
 			//out.println(values.size());
 			 //Display values
+			long duration;
 			for (Time time : values) {
+				if(time.getEnd() != null){
+					long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
+					TimeUnit tu = TimeUnit.MINUTES;
+					duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
+				}else{
+					duration = 0;
+				}
 				out.println("<tr>");
 				out.println("<td>" + "</td>");
 				out.println("<td>" + "</td>");
 	            out.println("<td>" + time.getTask_id() + "</td>");
 	            out.println("<td>" + time.getStart() + "</td>");
-	            out.println("<td>" + time.getEnd() + "</td>");	  
-	            out.println("<td>" + "</td>");
+	            out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
+	            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
 	            out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
 	            //out.println("<td><a href=\"project?projectId="+ time.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
 	            out.println("</tr>");
@@ -263,33 +273,7 @@
  		db.getEntityManager().getTransaction().commit();
  	}
 %>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Project A</td>
-                                        <td>Sample Task F</td>
-                                        <td>12:40</td>
-                                        <td>16:50</td>
-                                        <td>4h 10min</td>
-                                        <td><a href="#" title="Edit"><span class="pe-7s-edit"></span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Project A</td>
-                                        <td>Sample Task B</td>
-                                        <td>08:00</td>
-                                        <td>11:25</td>
-                                        <td>3h 25min</td>
-                                        <td><a href="#" title="Edit"><span class="pe-7s-edit"></span></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Project B</td>
-                                        <td>Sample Task C</td>
-                                        <td>13:00</td>
-                                        <td>15:10</td>
-                                        <td>2h 10min</td>
-                                        <td><a href="#" title="Edit"><span class="pe-7s-edit"></span></a></td>
-                                    </tr>
+                                    
                                     </tbody>
                                 </table>
                             </div>
