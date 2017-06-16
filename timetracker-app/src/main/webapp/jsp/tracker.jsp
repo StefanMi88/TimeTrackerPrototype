@@ -1,3 +1,4 @@
+<%@page import="javax.swing.text.Document"%>
 <%@page import="java.util.concurrent.TimeUnit"%>
 <%@page import="com.mysql.jdbc.TimeUtil"%>
 <%@page import="at.jku.timetracker.TimeTracker"%>
@@ -168,10 +169,12 @@
 																String project =request.getParameter("project");
 																//Test
 																db.getEntityManager().getTransaction().begin();	 
+																
 																Query query;
 																if (project == null || project.isEmpty())
 																	query = db.getEntityManager().createNativeQuery("Select * from Task t ", Task.class);
 																else
+																	
 																	query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
 																
 																query.setParameter(1, project);
