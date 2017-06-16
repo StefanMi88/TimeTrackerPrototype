@@ -127,7 +127,6 @@
                             <div class="content table-responsive table-full-width">
                                 <table class="table table-hover table-striped">
                                     <thead>
-                                        <th>Project</th>
                                     	<th>Task</th>
                                     	<th>Cur. Time</th>
                                     	<th>Start tracking</th>
@@ -135,33 +134,7 @@
                                     <tbody>
                                         <tr>
                                             <form method="post" action="startTime">
-                                                <td>	
-                                                	<select name="project" id="project" >
-                                                        <%
-															try {
-																db.getEntityManager().getTransaction().begin();	 
-																Query query = db.getEntityManager().createNativeQuery("Select * from project p", Project.class);
-																List<Project> values = query.getResultList();
-																
-																if (values != null)
-																{
-																	for (Project prj : values) {
-															            out.println("<option value=" + prj.getId() + ">");
-															            out.println("" + prj.getName() + "</option>");
-																	}
-																}
-																
-															}
-															catch (Exception ex) {
-																 out.println(ex.getMessage());
-															}
-														 	finally
-														 	{
-														 		db.getEntityManager().getTransaction().commit();
-														 	}
-														%>
-                                               		</select>
-                                                </td>
+                                            
                                                 <td>
                                                     <select name="task" id="task">
                                                         <%
@@ -226,7 +199,6 @@
                             <div class="content table-responsive table-full-width">
                                 <table class="table table-hover table-striped">
                                     <thead>
-                                        <th>ID</th>
                                         <th>Project</th>
                                         <th>Task</th>
                                         <th>From</th>
@@ -239,6 +211,8 @@
 	try {
 		db.getEntityManager().getTransaction().begin();	 
 		Query query = db.getEntityManager().createNativeQuery("Select * from time t", Time.class);
+		Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
+		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
 		List<Time> values = query.getResultList();
 		
 		if (values != null)
@@ -254,10 +228,14 @@
 				}else{
 					duration = 0;
 				}
+				queryTask.setParameter(1, time.getTask_id());
+				Task t = (Task) queryTask.getSingleResult();
+				
+				queryProj.setParameter(1, t.getProject_id());
+				Project p = (Project)queryProj.getSingleResult();
 				out.println("<tr>");
-				out.println("<td>" + "</td>");
-				out.println("<td>" + "</td>");
-	            out.println("<td>" + time.getTask_id() + "</td>");
+				out.println("<td>" + p.getName()+ "</td>");
+	            out.println("<td>" + t.getName() + "</td>");
 	            out.println("<td>" + time.getStart() + "</td>");
 	            out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
 	            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");

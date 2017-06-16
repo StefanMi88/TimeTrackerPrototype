@@ -116,12 +116,15 @@ public class ProjectServlet extends HttpServlet {
 		else if (action.equals("delete")) {
 			db.getEntityManager().getTransaction().begin();	 
 			Query queryDelete = db.getEntityManager().createNativeQuery("DELETE FROM project WHERE id = ?");
+			Query queryDeleteTask = db.getEntityManager().createNativeQuery("DELETE FROM Task WHERE project_id = ?");
 			projectId = req.getParameter("projectId");
 			try {
 				//projectId = (String) query.getSingleResult();
 				// Insert new Project in DB
 				queryDelete.setParameter(1, projectId);
 				queryDelete.executeUpdate();
+				queryDeleteTask.setParameter(1, projectId);
+				queryDeleteTask.executeUpdate();
 				db.getEntityManager().getTransaction().commit();
 				
 			} catch (Exception ex) {

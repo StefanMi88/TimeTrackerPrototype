@@ -41,17 +41,6 @@ public class StartTimeServlet extends HttpServlet{
 		String project = req.getParameter("project");
 		String task = req.getParameter("task");
 		
-		Query selectProjectQuery = db.getEntityManager().createNativeQuery(
-				"Select * from Project p where p.id = ?", Project.class);
-		selectProjectQuery.setParameter(1, project);
-		try {
-			p = (Project) selectProjectQuery.getSingleResult();
-		} catch (NoResultException ex) {
-		   return;
-		}
-		
-		p.setDescription("jdi");
-		
 		
 		try {
 			int taskId = Integer.parseInt(task);
@@ -127,36 +116,6 @@ public class StartTimeServlet extends HttpServlet{
 		}
 		
 		resp.sendRedirect(req.getContextPath() + "/tracker");
-		
-		/*Query insertTimeQuery = db.getEntityManager().createNativeQuery("Insert into User(username, password, firstname, lastname, country, zip, address, city, company, email, aboutme, type) values(?,?,?,?,?,?,?,?,?,?,?,?)");
-		insertTimeQuery.setParameter(1, username);
-		insertTimeQuery.setParameter(2, password);
-		insertUserQuery.setParameter(3, firstname);
-		insertUserQuery.setParameter(4, lastname);
-		insertUserQuery.setParameter(5, country);
-		insertUserQuery.setParameter(6, zip);
-		insertUserQuery.setParameter(7, address);
-		insertUserQuery.setParameter(8, city);
-		insertUserQuery.setParameter(9, company);
-		insertUserQuery.setParameter(10, email);
-		insertUserQuery.setParameter(11, aboutme);
-		insertUserQuery.setParameter(12, type);
-		
-		insertUserQuery.executeUpdate();
-		db.getEntityManager().getTransaction().commit();
-		req.setAttribute("firstname", null);
-		req.setAttribute("lastname", null);
-		req.setAttribute("country", null);
-		req.setAttribute("zip", null);
-		req.setAttribute("address", null);
-		req.setAttribute("city", null);
-		req.setAttribute("company", null);
-		req.setAttribute("email", null);
-		req.setAttribute("aboutme", null);
-		req.setAttribute("username", null);
-		req.setAttribute("password", null);
-		req.setAttribute("type", null);		
-		resp.sendRedirect(req.getContextPath() + "/user");*/
 		return;
 		
 	}
