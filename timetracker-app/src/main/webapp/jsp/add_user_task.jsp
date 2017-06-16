@@ -1,3 +1,14 @@
+<%@page import="javax.swing.text.Document"%>
+<%@page import="java.util.concurrent.TimeUnit"%>
+<%@page import="com.mysql.jdbc.TimeUtil"%>
+<%@page import="at.jku.timetracker.TimeTracker"%>
+<%@page import="at.jku.timetracker.database.DatabaseConnector"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="at.jku.timetracker.model.Project"%>
+<%@page import="at.jku.timetracker.model.Task"%>
+<%@page import="at.jku.timetracker.model.Time"%>
+<%@page import="at.jku.timetracker.model.User"%>
+<%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,6 +43,18 @@
 
 </head>
 <body>
+
+<%
+	DatabaseConnector db;
+	
+	if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
+		db = new DatabaseConnector();
+		request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
+	} else {
+		db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
+	}
+
+%>
 
 <div class="wrapper">
     <div class="sidebar" data-color="orange" data-image="img/sidebar-5.jpg">
@@ -90,7 +113,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Add User to Task</a>
+                    <a class="navbar-brand" href="#">Add User to Project</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -120,8 +143,29 @@
                                         <div class="col-md-3">
                                             <label for="name" >User:</label>
 											<select>
-                                                        <option value="projecta">Toni Polster</option>
-                                                        <option value="projectb">Herbert Prohaska</option>
+                                                     <%
+															try {
+																db.getEntityManager().getTransaction().begin();	 
+																Query query = db.getEntityManager().createNativeQuery("Select * from User u", User.class);
+																List<User> values = query.getResultList();
+																
+																if (values != null)
+																{
+																	for (User user : values) {
+															            out.println("<option value=" + user.getUsername() + ">");
+															           
+																	}
+																}
+																
+															}
+															catch (Exception ex) {
+																 out.println(ex.getMessage());
+															}
+														 	finally
+														 	{
+														 		db.getEntityManager().getTransaction().commit();
+														 	}
+														%>
                                             </select>
                                         </div>
                                         <div class="col-md-2">
