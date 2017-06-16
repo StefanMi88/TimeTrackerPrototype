@@ -103,6 +103,18 @@ public class Task {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+
+	public Task(int id, int project_id, String description, String name) {
+		super();
+		this.id = id;
+		this.project_id = project_id;
+		this.description = description;
+		this.name = name;
+	}
+	
+	
 	
 	
 	
