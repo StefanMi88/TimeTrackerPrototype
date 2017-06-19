@@ -129,16 +129,37 @@
                                     <thead>
                                     	<th>Task</th>
                                     	<th>Cur. Time</th>
-                                    	<th>Start tracking</th>
+                                    	<th>Start/Stop tracking</th>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <form method="post" action="startTime">
                                             
                                                 <td>
-                                                    <select name="task" id="task">
+                                                    <select name="task" id="task"  <% 
+                                                    
+                                                    try{
+                                                        String taskId = this.getServletContext().getAttribute("taskId").toString();
+                                                    		if (taskId != null){
+                                                            	out.println("disabled");
+                                                            }
+                                                    		
+                                                    		}catch(Exception e){
+                                                    	
+                                                    }
+                                                    
+                                                    %>>
                                                         <%
 															try {
+																String taskId = null;
+																try{
+			                                                        taskId = this.getServletContext().getAttribute("taskId").toString();
+			                                                    		if (taskId != null){
+			                                                            	out.println("disabled");
+			                                                            }
+			                                                    		
+			                                                    		}catch(Exception e){}
+																
 																String project =request.getParameter("project");
 																//Test
 																db.getEntityManager().getTransaction().begin();	 
@@ -156,10 +177,15 @@
 																if (values != null)
 																{
 																	for (Task task : values) {
-															            out.println("<option value=" + task.getId() + ">");
-															            out.println("" + task.getName() + "</option>");
+																		if (taskId != null && task.getId() == Integer.valueOf(taskId)){
+															            out.println("<option value=" + task.getId() + " selected>");
+															            out.println("" + task.getName() + "</option>");}
+																		else{
+																			out.println("<option value=" + task.getId() + " >");
+																            out.println("" + task.getName() + "</option>");}
+																		}
 																	}
-																}
+																
 																
 															}
 															catch (Exception ex) {
@@ -204,7 +230,6 @@
                                         <th>From</th>
                                         <th>To</th>
                                         <th>Duration</th>
-                                        <th>Edit</th>
                                     </thead>
                                     <tbody>
 <%
@@ -239,7 +264,7 @@
 	            out.println("<td>" + time.getStart() + "</td>");
 	            out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
 	            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
-	            out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            //out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
 	            //out.println("<td><a href=\"project?projectId="+ time.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
 	            out.println("</tr>");
 			}
