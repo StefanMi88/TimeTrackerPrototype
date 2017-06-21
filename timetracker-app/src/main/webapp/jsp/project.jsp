@@ -197,7 +197,7 @@
 													class="btn btn-warning btn-fill btn-sm" name="submit">Add Task</button>
 											</div>
 											<div class="control-group error">
-		      										<span class="help-inline"><%=request.getAttribute("errorMessage")%></span>
+		      										<span class="help-inline"><% if(request.getAttribute("errorMessage")!=null) {out.println(request.getAttribute("errorMessage"));}%></span>
 		    								</div>
 										</div>
 									</form>
