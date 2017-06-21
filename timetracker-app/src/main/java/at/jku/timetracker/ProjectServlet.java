@@ -137,8 +137,9 @@ public class ProjectServlet extends HttpServlet {
 		else if (action.equals("addTask")) {
 			String nextJSP = "/jsp/project.jsp?projectId=" + req.getParameter("projectId");
 			db.getEntityManager().getTransaction().begin();
-			Query queryName = db.getEntityManager().createNativeQuery("SELECT id FROM Task WHERE name = ?");
+			Query queryName = db.getEntityManager().createNativeQuery("SELECT id FROM Task WHERE name = ? AND project_id = ?");
 			queryName.setParameter(1, req.getParameter("taskName"));
+			queryName.setParameter(2, req.getParameter("projectId"));
 			//Check if task with same name exists
 			if (queryName.getResultList().isEmpty() && req.getParameter("taskName") != "") {
 				db.getEntityManager().getTransaction().commit();
@@ -169,7 +170,7 @@ public class ProjectServlet extends HttpServlet {
 			}
 			else if (!queryName.getResultList().isEmpty()) {
 				db.getEntityManager().getTransaction().commit();
-				req.setAttribute("errorMessage", "Task already exists!");
+				req.setAttribute("errorMessage", "Task already exists! Unique names are required!");
 				RequestDispatcher dispatcher = getServletContext()
 						.getRequestDispatcher(nextJSP);
 				dispatcher.forward(req, resp);
