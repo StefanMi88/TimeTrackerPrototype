@@ -4,6 +4,8 @@
 <%@page import="at.jku.timetracker.model.Project"%>
 <%@page import="at.jku.timetracker.model.Task"%>
 <%@page import="at.jku.timetracker.model.Category"%>
+<%@page import="at.jku.timetracker.model.Projectmembers"%>
+<%@page import="at.jku.timetracker.model.User"%>
 <%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
@@ -161,6 +163,74 @@
 										<button type="submit" class="btn btn-error btn-fill btn-sm">
 											<span class="fa fa-trash"></span>... or delete project
 										</button>
+									</form>
+									<br />
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="card">
+								<div class="header">
+									<h4 class="title">Add Users to project...</h4>
+									<p class="category">Select users who should be able to access the project and tasks<br />Note: press STRG or CMD to select multiple users!</p>
+								</div>
+								<div class="content">
+									<form method="post" action="project?action=addUsers">
+										<div class="row">
+											<div class="col-md-12">
+											<% try {
+												db.getEntityManager().getTransaction().begin();	 
+												Query members = db.getEntityManager().createNativeQuery("SELECT username FROM projectmembers WHERE project_id = ?", Projectmembers.class);
+												members.setParameter(1, request.getParameter("projectId"));
+												List<Projectmembers> member = members.getResultList();
+												Query users = db.getEntityManager().createNativeQuery("SELECT username FROM user", User.class);
+												List<User> user = users.getResultList();
+												
+												if (!user.isEmpty()) {
+													//out.println(member.size());
+													//Display values
+													%>
+													<select multiple size="<% out.println(user.size()); %>">
+													<% 
+													for (User u: user) {
+														%><option value="<% out.println(u.getUsername()); %>" 
+														<% 
+															for(Projectmembers m: member) {
+																if (m.getUsername().equals(u.getUsername())) {
+																	out.println("selected");
+																}
+															}
+														%>
+														>
+														<% out.println(u.getUsername()); %></option><%
+													}
+												}
+												else {
+													out.println("");
+												}
+												
+											}
+											catch (Exception ex) {
+												 out.println(ex.getMessage());
+											} finally {
+										 		db.getEntityManager().getTransaction().commit();
+										 	} %>
+				
+											</select>
+											</div>
+											<input type="hidden"
+													name="projectId" id="projectId"
+													value="<%out.println(request.getParameter("projectId"));%>" />
+											<div class="col-md-2">
+												<label for="submit">&nbsp;</label>
+												<button type="submit"
+													class="btn btn-warning btn-fill btn-sm" name="submit">Update users</button>
+											</div>
+											<div class="control-group error">
+		      										<span class="help-inline"><% if(request.getAttribute("errorMessage")!=null) {out.println(request.getAttribute("errorMessage"));}%></span>
+		    								</div>
+										</div>
 									</form>
 									<br />
 								</div>

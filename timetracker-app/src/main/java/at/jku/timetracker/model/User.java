@@ -10,6 +10,9 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
+	@Column(name = "ID")
+	private int id;
+	
 	@Column(name = "USERNAME")
 	private String username;
 
@@ -50,6 +53,14 @@ public class User {
 		super();
 	}
 
+	public int getId() {
+		return id;
+	}	
+	
+	public void setId(int id) {
+		this.id = id;
+	}	
+	
 	public String getCity() {
 		return city;
 	}

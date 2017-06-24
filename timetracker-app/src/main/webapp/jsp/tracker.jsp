@@ -207,6 +207,9 @@
                                             var time = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
                                             document.getElementById("curtime").innerHTML = time;
                                         </script>
+                                        <tr>
+                                        	<td colspan="3"><button  class="btn btn-warning btn-fill btn-sm"><span class="fa fa-edit"></span>add recording manually</button></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -240,10 +243,9 @@
 		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
 		List<Time> values = query.getResultList();
 		
-		if (values != null)
-		{
+		if (!values.isEmpty()) {
 			//out.println(values.size());
-			 //Display values
+			//Display values
 			long duration;
 			for (Time time : values) {
 				if(time.getEnd() != null){
