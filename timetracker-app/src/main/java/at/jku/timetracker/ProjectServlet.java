@@ -113,6 +113,34 @@ public class ProjectServlet extends HttpServlet {
 			this.getServletContext().setAttribute("PROJECTID", projectId);
 			resp.sendRedirect(req.getContextPath()+ "/project?projectId="+projectId);
 		} 
+		//Update Project
+		else if (action.equals("addUsers")) {
+			projectId = req.getParameter("projectId");
+			String[] members = req.getParameterValues("projectmembers");
+			db.getEntityManager().getTransaction().begin();	
+			Query delete = db.getEntityManager().createNativeQuery("DELETE FROM projectmembers WHERE project_id = ?");
+			delete.setParameter(1, projectId);
+			delete.executeUpdate();
+			db.getEntityManager().getTransaction().commit();
+			for (String s: members) {
+				db.getEntityManager().getTransaction().begin();	
+				Query update = db.getEntityManager().createNativeQuery("INSERT INTO projectmembers (username, project_id) VALUES(?,?)");
+				try {
+					//projectId = (String) query.getSingleResult();
+					// Insert new Project in DB
+					s = s.replaceAll("\\r\\n", "");
+					update.setParameter(1, s);
+					update.setParameter(2, projectId);
+					update.executeUpdate();
+					db.getEntityManager().getTransaction().commit();
+							
+				} catch (Exception ex) {
+					db.getEntityManager().getTransaction().commit();
+				}
+			}	
+			this.getServletContext().setAttribute("PROJECTID", projectId);
+			resp.sendRedirect(req.getContextPath()+ "/project?projectId="+projectId);
+		} 
 		else if (action.equals("delete")) {
 			db.getEntityManager().getTransaction().begin();	 
 			Query queryDelete = db.getEntityManager().createNativeQuery("DELETE FROM project WHERE id = ?");

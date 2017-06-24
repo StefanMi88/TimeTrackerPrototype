@@ -185,25 +185,27 @@
 												members.setParameter(1, request.getParameter("projectId"));
 												List<Projectmembers> member = members.getResultList();
 												Query users = db.getEntityManager().createNativeQuery("SELECT username FROM user", User.class);
-												List<User> user = users.getResultList();
-												
+												List<User> user = users.getResultList();	
 												if (!user.isEmpty()) {
 													//out.println(member.size());
+													//out.println(user.size());
 													//Display values
 													%>
-													<select multiple size="<% out.println(user.size()); %>">
+													<select multiple id="projectmembers" name="projectmembers" size="<% out.println(user.size()); %>">
 													<% 
 													for (User u: user) {
-														%><option value="<% out.println(u.getUsername()); %>" 
+														String curUser = u.getUsername();
+														%><option value="<% out.println(curUser); %>" 
 														<% 
 															for(Projectmembers m: member) {
-																if (m.getUsername().equals(u.getUsername())) {
-																	out.println("selected");
+																String curMember = m.getUsername();
+																if (curUser.startsWith(curMember)) {
+																	out.println(" selected");
 																}
 															}
 														%>
 														>
-														<% out.println(u.getUsername()); %></option><%
+														<% out.println(curUser); %></option><%
 													}
 												}
 												else {
