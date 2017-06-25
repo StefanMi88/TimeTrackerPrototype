@@ -7,6 +7,7 @@
 <%@page import="at.jku.timetracker.model.Project"%>
 <%@page import="at.jku.timetracker.model.Task"%>
 <%@page import="at.jku.timetracker.model.Time"%>
+<%@page import="at.jku.timetracker.model.User"%>
 <%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
@@ -160,16 +161,18 @@
 			                                                    		
 			                                                    		}catch(Exception e){}
 																
-																String project =request.getParameter("project");
+																String project = request.getParameter("project");
 																//Test
 																db.getEntityManager().getTransaction().begin();	 
 																
 																Query query;
-																if (project == null || project.isEmpty())
-																	query = db.getEntityManager().createNativeQuery("Select * from Task t ", Task.class);
-																else
-																	
+																if (project == null || project.isEmpty()) {
+																	User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+																	query = db.getEntityManager().createNativeQuery("SELECT name FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = " + u.getUsername() +")", Task.class);
+																}
+																else {																	
 																	query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																}	
 																
 																query.setParameter(1, project);
 																List<Task> values = query.getResultList();
