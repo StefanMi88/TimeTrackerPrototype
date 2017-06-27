@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 24. Jun 2017 um 14:22
+-- Erstellungszeit: 27. Jun 2017 um 18:19
 -- Server-Version: 10.1.21-MariaDB
 -- PHP-Version: 5.6.30
 
@@ -49,17 +49,19 @@ INSERT INTO `category` (`id`, `name`, `description`, `project_id`) VALUES
 CREATE TABLE `project` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text NOT NULL
+  `description` text NOT NULL,
+  `category` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `project`
 --
 
-INSERT INTO `project` (`id`, `name`, `description`) VALUES
-(2, 'projecta', 'vdvdfvcvcv'),
-(3, 'test', 'max65'),
-(4, 'Test Project', 'Test from Stefan');
+INSERT INTO `project` (`id`, `name`, `description`, `category`) VALUES
+(2, 'projecta', 'vdvdfvcvcv', 'Development'),
+(3, 'test', 'max65', 'Development'),
+(4, 'Test Project', 'Test from Stefan', 'Sales'),
+(5, 'Test Category', 'Category Marketing', 'Marketing');
 
 -- --------------------------------------------------------
 
@@ -84,7 +86,8 @@ INSERT INTO `projectmembers` (`id`, `username`, `project_id`, `admin`) VALUES
 (36, 'max', 3, 0),
 (37, 'admin2', 3, 0),
 (38, 'oliver', 3, 0),
-(39, 'admin2', 2, 0);
+(40, 'admin', 2, 0),
+(41, 'admin2', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -111,7 +114,8 @@ INSERT INTO `task` (`id`, `name`, `description`, `project_id`) VALUES
 (18, 'afe', 'aef', 4),
 (19, 'afef', 'afef', 4),
 (20, 'aefa', 'aef', 4),
-(21, 'test', 'test', 3);
+(21, 'test', 'test', 3),
+(22, 'testTaskA', 'testTaskA', 2);
 
 -- --------------------------------------------------------
 
@@ -222,7 +226,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `projectmembers`
 --
 ALTER TABLE `projectmembers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
