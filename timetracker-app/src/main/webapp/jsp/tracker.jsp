@@ -169,7 +169,7 @@
 																Query query;
 																if (project == null || project.isEmpty()) {
 																	User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-																	query = db.getEntityManager().createNativeQuery("SELECT name FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);
+																	query = db.getEntityManager().createNativeQuery("SELECT name, id FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);
 																}
 																else {																	
 																	query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
@@ -182,10 +182,10 @@
 																{
 																	for (Task task : values) {
 																		if (taskId != null && task.getId() == Integer.valueOf(taskId)){
-															            out.println("<option value=" + task.getId() + " selected>");
+															            out.println("<option value=\"" + task.getId() + "\" selected>");
 															            out.println("" + task.getName() + "</option>");}
 																		else{
-																			out.println("<option value=" + task.getId() + " >");
+																			out.println("<option value=\"" + task.getId() + "\" >");
 																            out.println("" + task.getName() + "</option>");}
 																		}
 																	}
@@ -242,7 +242,7 @@
 <%
 	try {
 		db.getEntityManager().getTransaction().begin();	 
-		Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
+		Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
 		Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
 		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
 		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
@@ -270,10 +270,18 @@
 				out.println("<td>" + p.getName()+ "</td>");
 	            out.println("<td>" + t.getName() + "</td>");
 	            out.println("<td>" + time.getStart() + "</td>");
-	            out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
-	            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
-	            //out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
-	            //out.println("<td><a href=\"project?projectId="+ time.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            if (time.getEnd() == null) {
+	            	out.println("<td>in progress</td>");	
+	            }
+	            else {
+	            	out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	 
+	            }
+	            if (duration != 0) {
+		            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>"); 
+	            }
+	            else {
+	            	out.println("<td>in progress</td>");	
+	            }
 	            out.println("</tr>");
 			}
 		}

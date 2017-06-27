@@ -281,14 +281,11 @@
 										
 											<div class="col-md-4">
 												<label for="name">Name:</label> 
-												<input class="" type="text"
-													name="taskName" id="taskName"
-													value="" />
+												<input class="" type="text" name="taskName" id="taskName" value="" />
 											</div>
 											<div class="col-md-6">
 												<label for="name">Description:</label> 
-												<input type="text" name="taskDesc" id="taskDesc"
-													value="" />
+												<input type="text" name="taskDesc" id="taskDesc" value="" />
 											</div>
 											<input type="hidden"
 													name="projectId" id="projectId"

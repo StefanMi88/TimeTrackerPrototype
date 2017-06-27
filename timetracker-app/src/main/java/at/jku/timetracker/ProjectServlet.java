@@ -66,7 +66,6 @@ public class ProjectServlet extends HttpServlet {
 		}
 		
 		if (action.equals("add")) {
-			
 			db.getEntityManager().getTransaction().begin();	 
 			Query queryMaxId = db.getEntityManager().createNativeQuery("SELECT MAX(id)FROM project");
 			Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO project (id, name, description, category) VALUES (?, ?, ?, ?)");
@@ -173,16 +172,18 @@ public class ProjectServlet extends HttpServlet {
 			queryName.setParameter(2, req.getParameter("projectId"));
 			//Check if task with same name exists
 			if (queryName.getResultList().isEmpty() && req.getParameter("taskName") != "") {
+				//System.out.println("in if");
 				db.getEntityManager().getTransaction().commit();
 				db.getEntityManager().getTransaction().begin();
-				Query queryMaxId = db.getEntityManager().createNativeQuery("SELECT MAX(id)FROM Task");
-				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO TASK (id, name, description, project_id) VALUES (?, ?, ?, ?)");
+				Query queryMaxId = db.getEntityManager().createNativeQuery("SELECT MAX(id) FROM task");
+				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO task (id, name, description, project_id) VALUES (?, ?, ?, ?)");
 				String taskName = req.getParameter("taskName");
 				String taskDesc = req.getParameter("taskDesc");
 				projectId = req.getParameter("projectId");
 				
 				try {
 					Integer maxTaskId = (Integer)queryMaxId.getSingleResult();
+					if (maxTaskId == null) maxTaskId = 0;
 					Task task = new Task(maxTaskId +1, 0, taskName, taskDesc);
 									
 					db.getEntityManager().getTransaction().commit();

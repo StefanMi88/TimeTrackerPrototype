@@ -29,6 +29,7 @@ public class StartTimeServlet extends HttpServlet{
 			throws ServletException, IOException {
 
 		DatabaseConnector db;
+		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
 
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
@@ -42,28 +43,28 @@ public class StartTimeServlet extends HttpServlet{
 		
 		if(this.getServletContext().getAttribute("taskId") != null && this.getServletContext().getAttribute("taskId").toString() != "0"){
 			taskId = Integer.parseInt(this.getServletContext().getAttribute("taskId").toString());
+			System.out.println("TaskId if: " + taskId);
 		}else{
 			taskId = Integer.parseInt(req.getParameter("task"));
+			System.out.println("TaskId else: " + taskId);
 		}
 		
 		try {
 			
 			Timestamp curtime = null;
 		      
-		      if (req.getParameter("curtime") != null && 
-		          !req.getParameter("curtime").equals("")) {
-		    	  curtime = Timestamp.valueOf(req.getParameter("curtime"));
-		      }
-		      else
-		      {
-		    	  curtime =  new java.sql.Timestamp(System.currentTimeMillis());
-		      }
+		    if (req.getParameter("curtime") != null && !req.getParameter("curtime").equals("")) {
+		    	curtime = Timestamp.valueOf(req.getParameter("curtime"));
+		    }
+		    else {
+		    	curtime =  new java.sql.Timestamp(System.currentTimeMillis());
+		    }
 		   
 		    db.getEntityManager().getTransaction().begin();	
 		    Query querySelect = db.getEntityManager().createNativeQuery("Select * from time t where t.task_id = ? AND t.user_id = ? AND t.end IS NULL", Time.class);
 		    
 		    querySelect.setParameter(1, taskId);
-		    querySelect.setParameter(2, 1);
+		    querySelect.setParameter(2, u.getId());
 			List<Time> values = querySelect.getResultList();
 			
 		    db.getEntityManager().getTransaction().commit();
@@ -86,7 +87,6 @@ public class StartTimeServlet extends HttpServlet{
 					
 			}
 			else { // START
-				User u =  (User )this.getServletContext().getAttribute(TimeTracker.User);
 				Time t = new Time(taskId , u.getId() , curtime, null);
 				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO time (task_id, user_id, start, end) VALUES (?, ?, ?, ?)");
 				
