@@ -1,5 +1,9 @@
 <%@page import="at.jku.timetracker.model.User"%>
 <%@page import="at.jku.timetracker.TimeTracker"%>
+<%@page import="at.jku.timetracker.model.Project"%>
+<%@page import="at.jku.timetracker.database.DatabaseConnector"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -34,6 +38,17 @@
 
 </head>
 <body>
+<%
+	DatabaseConnector db;
+	
+	if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
+		db = new DatabaseConnector();
+		request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
+	} else {
+		db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
+	}
+
+%>
 
 <div class="wrapper">
     <div class="sidebar" data-color="orange" data-image="img/sidebar-5.jpg">
@@ -97,8 +112,7 @@
                             	 out.println("");
                             }else{
                             	 out.println("hidden");
-                            }
-                           
+                            }                           
                             %>">
                                 New User
                             </a>
@@ -118,14 +132,40 @@
             </div>
         </nav>
 
-
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-8">
                         <div class="card">
                             <div class="header">
-                                <h4 class="title">Edit Profile</h4>
+                                <h4 class="title">Edit Profile of <%=request.getAttribute("username")%></h4>
+                                <p class="category">
+                                <%
+									try {
+										Query query;
+										db.getEntityManager().getTransaction().begin();	
+										query = db.getEntityManager().createNativeQuery("SELECT name FROM project WHERE id IN (SELECT project_id FROM projectmembers WHERE username = " + request.getAttribute("username") +")", Project.class);
+										
+										List<Project> values = query.getResultList();
+										
+										if (!values.isEmpty()) {
+											out.println("<b>Member of: </b>");
+											for (Project p: values) {
+												out.println(p.getName() + ", ");
+											}
+										}
+										else {
+											out.println("You're not assigned to any projects yet!");
+										}
+									}
+									catch (Exception ex) {
+										 out.println(ex.getMessage());
+									}
+									finally {
+										db.getEntityManager().getTransaction().commit();
+									}
+			        			%>
+        			</p>
                             </div>
                             <div class="content">
                                 <form method="post" action="user">
@@ -133,19 +173,19 @@
                                         <div class="col-md-5">
                                             <div class="form-group">
                                                 <label>Company</label>
-                                                <input type="text" class="form-control" placeholder="Company" name="company" id="company" value='<%=request.getAttribute("company")%>'>
+                                                <input type="text" class="form-control" placeholder="Company" name="company" id="company" value="<%=request.getAttribute("company")%>">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Username</label>
-                                                <input type="text" disabled="disabled" class="form-control" placeholder="Username" name="username" id="username" value='<%=request.getAttribute("username")%>'>
+                                                <input type="text" disabled="disabled" class="form-control" placeholder="Username" name="username" id="username" value="<%=request.getAttribute("username")%>">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Email address</label>
-                                                <input type="email" class="form-control" placeholder="Email" name="email" id="email" value='<%=request.getAttribute("email")%>'>
+                                                <input type="email" class="form-control" placeholder="Email" name="email" id="email" value="<%=request.getAttribute("email")%>">
                                             </div>
                                         </div>
                                     </div>
@@ -154,13 +194,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>First Name</label>
-                                                <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname" value='<%=request.getAttribute("firstname")%>'>
+                                                <input type="text" class="form-control" placeholder="First Name" name="firstname" id="firstname" value="<%=request.getAttribute("firstname")%>">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Last Name</label>
-                                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname" value='<%=request.getAttribute("lastname")%>'>
+                                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" id="lastname" value="<%=request.getAttribute("lastname")%>">
                                             </div>
                                         </div>
                                     </div>
@@ -169,7 +209,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label>Address</label>
-                                                <input type="text" class="form-control" placeholder="Home Address" name="address" id="address" value='<%=request.getAttribute("address")%>'>
+                                                <input type="text" class="form-control" placeholder="Home Address" name="address" id="address" value="<%=request.getAttribute("address")%>">
                                             </div>
                                         </div>
                                     </div>
@@ -178,19 +218,19 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>City</label>
-                                                <input type="text" class="form-control" placeholder="City" name="city" id="city" value='<%=request.getAttribute("city")%>'>
+                                                <input type="text" class="form-control" placeholder="City" name="city" id="city" value="<%=request.getAttribute("city")%>">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Country</label>
-                                                <input type="text" class="form-control" placeholder="Country" name="country" id="country" value='<%=request.getAttribute("country")%>'>
+                                                <input type="text" class="form-control" placeholder="Country" name="country" id="country" value="<%=request.getAttribute("country")%>">
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Postal Code</label>
-                                                <input type="number" class="form-control" placeholder="ZIP Code" name="zip" id="zip" value='<%=request.getAttribute("zip")%>'>
+                                                <input type="number" class="form-control" placeholder="ZIP Code" name="zip" id="zip" value="<%=request.getAttribute("zip")%>">
                                             </div>
                                         </div>
                                     </div>
@@ -213,19 +253,16 @@
                 </div>
             </div>
         </div>
-
-
         <footer class="footer">
             <div class="container-fluid">
                 <p class="copyright pull-right">
-                    &copy; 2017 <a href="#">Time Tracker, SE Praktikum SS17
+                    &copy; 2017 <a href="#">Time Tracker, SE Praktikum SS17</a>
                 </p>
             </div>
         </footer>
 
     </div>
 </div>
-
 
 </body>
 
