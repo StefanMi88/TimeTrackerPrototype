@@ -1,3 +1,14 @@
+<%@page import="javax.swing.text.Document"%>
+<%@page import="java.util.concurrent.TimeUnit"%>
+<%@page import="com.mysql.jdbc.TimeUtil"%>
+<%@page import="at.jku.timetracker.TimeTracker"%>
+<%@page import="at.jku.timetracker.database.DatabaseConnector"%>
+<%@page import="javax.persistence.Query"%>
+<%@page import="at.jku.timetracker.model.Project"%>
+<%@page import="at.jku.timetracker.model.Task"%>
+<%@page import="at.jku.timetracker.model.Time"%>
+<%@page import="at.jku.timetracker.model.User"%>
+<%@page import="java.util.*"%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,7 +43,17 @@
 
 </head>
 <body>
+<%
+	DatabaseConnector db;
+	
+	if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
+		db = new DatabaseConnector();
+		request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
+	} else {
+		db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
+	}
 
+%>
 <div class="wrapper">
     <div class="sidebar" data-color="orange" data-image="img/sidebar-5.jpg">
 
@@ -108,138 +129,83 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Tasks</h4>
-                                <p class="category">you spent your time on</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
-
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Modul 1
-                                        <i class="fa fa-circle text-danger"></i> Prototype
-                                        <i class="fa fa-circle text-warning"></i> MockUp
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-clock-o"></i> Time span: Last Week
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Projects</h4>
-                                <p class="category">Cumulated time you spent on projects</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartHours" class="ct-chart"></div>
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> Project A
-                                        <i class="fa fa-circle text-danger"></i> Project B
-                                        <i class="fa fa-circle text-warning"></i> Off Project
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-history"></i> Day by day view
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    
 
 
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card ">
-                            <div class="header">
-                                <h4 class="title">Week-by-Week Report</h4>
-                                <p class="category">Time spent during the last weeks</p>
-                            </div>
-                            <div class="content">
-                                <div id="chartActivity" class="ct-chart"></div>
-
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> On Project
-                                        <i class="fa fa-circle text-danger"></i> Off Project
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-check"></i> Some important message
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+               
 
                     <div class="col-md-6">
                         <div class="card ">
                             <div class="header">
                                 <h4 class="title">Tasks</h4>
-                                <p class="category">Worked on today</p>
+                                <p class="category">Worked on</p>
                             </div>
                             <div class="content">
                                 <div class="table-full-width">
                                     <table class="table">
+                                    <thead>
+                                        <th>Project</th>
+                                        <th>Task</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Duration</th>
+                                    </thead>
                                         <tbody>
+                                        
+                                        
+<%
+	try {
+		db.getEntityManager().getTransaction().begin();	 
+		Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
+		Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
+		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
+		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+		query.setParameter(1, u.getId());
+		List<Time> values = query.getResultList();
+		
+		if (!values.isEmpty()) {
+			//out.println(values.size());
+			//Display values
+			long duration;
+			for (Time time : values) {
+				if(time.getEnd() != null){
+					long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
+					TimeUnit tu = TimeUnit.MINUTES;
+					duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
+				}else{
+					duration = 0;
+				}
+				queryTask.setParameter(1, time.getTask_id());
+				Task t = (Task) queryTask.getSingleResult();
+				
+				queryProj.setParameter(1, t.getProject_id());
+				Project p = (Project)queryProj.getSingleResult();
+				out.println("<tr>");
+				out.println("<td>" + p.getName()+ "</td>");
+	            out.println("<td>" + t.getName() + "</td>");
+	            out.println("<td>" + time.getStart() + "</td>");
+	            out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
+	            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
+	            //out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            //out.println("<td><a href=\"project?projectId="+ time.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
+	            out.println("</tr>");
+			}
+		}
+		
+	}
+	catch (Exception ex) {
+		 out.println(ex.getMessage());
+	} finally {
+ 		db.getEntityManager().getTransaction().commit();
+ 	}
+%>
+                                            
                                             <tr>
-                                                <td>
-                                                    <label class="checkbox">
-                                                        <input type="checkbox" value="" data-toggle="checkbox" checked="" disabled="">
-                                                    </label>
-                                                </td>
-                                                <td>Sample Task A</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label class="checkbox">
-                                                        <input type="checkbox" value="" data-toggle="checkbox" checked="" disabled="">
-                                                    </label>
-                                                </td>
-                                                <td>Sample Task B</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label class="checkbox">
-                                                        <input type="checkbox" value="" data-toggle="checkbox" checked="" disabled="">
-                                                    </label>
-                                                </td>
-                                                <td>Sample Task C</td>
-                                                <td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                        <i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            <form method="post" action="dashboard">
+                                        	<td colspan="3"><button  class="btn btn-warning btn-fill btn-sm"><span class="fa fa-edit"></span>Download</button></td>
+                                        	</form>
+                                        	</tr>
                                         </tbody>
                                     </table>
                                 </div>

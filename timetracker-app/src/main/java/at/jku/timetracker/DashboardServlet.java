@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import at.jku.timetracker.database.DatabaseConnector;
+
 @SuppressWarnings("serial")
 @WebServlet(name = "DashboardServlet", urlPatterns = { "/dashboard" })
 public class DashboardServlet extends HttpServlet {
@@ -17,9 +19,19 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		if (this.getServletContext().getAttribute("USERNAME") == null) {
+		if (this.getServletContext().getAttribute(TimeTracker.User) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
+		}
+
+		DatabaseConnector db;
+
+		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
+			db = new DatabaseConnector();
+			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
+		} else {
+			db = (DatabaseConnector) this.getServletContext().getAttribute(
+					TimeTracker.DBConnector);
 		}
 
 		String nextJSP = "/jsp/dashboard.jsp";
@@ -27,5 +39,12 @@ public class DashboardServlet extends HttpServlet {
 				.getRequestDispatcher(nextJSP);
 		dispatcher.forward(req, resp);
 
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO CSV Download starten
+		super.doPost(req, resp);
 	}
 }

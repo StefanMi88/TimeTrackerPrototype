@@ -40,7 +40,7 @@ public class StartTimeServlet extends HttpServlet{
 		
 		int taskId;
 		
-		if(this.getServletContext().getAttribute("taskId") != null){
+		if(this.getServletContext().getAttribute("taskId") != null && this.getServletContext().getAttribute("taskId").toString() != "0"){
 			taskId = Integer.parseInt(this.getServletContext().getAttribute("taskId").toString());
 		}else{
 			taskId = Integer.parseInt(req.getParameter("task"));
@@ -86,8 +86,8 @@ public class StartTimeServlet extends HttpServlet{
 					
 			}
 			else { // START
-			
-				Time t = new Time(taskId , 1, curtime, null);
+				User u =  (User )this.getServletContext().getAttribute(TimeTracker.User);
+				Time t = new Time(taskId , u.getId() , curtime, null);
 				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO time (task_id, user_id, start, end) VALUES (?, ?, ?, ?)");
 				
 				db.getEntityManager().getTransaction().begin();

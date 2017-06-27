@@ -1,3 +1,4 @@
+
 <%@page import="javax.swing.text.Document"%>
 <%@page import="java.util.concurrent.TimeUnit"%>
 <%@page import="com.mysql.jdbc.TimeUtil"%>
@@ -168,7 +169,7 @@
 																Query query;
 																if (project == null || project.isEmpty()) {
 																	User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-																	query = db.getEntityManager().createNativeQuery("SELECT name FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = " + u.getUsername() +")", Task.class);
+																	query = db.getEntityManager().createNativeQuery("SELECT name FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);
 																}
 																else {																	
 																	query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
@@ -241,9 +242,11 @@
 <%
 	try {
 		db.getEntityManager().getTransaction().begin();	 
-		Query query = db.getEntityManager().createNativeQuery("Select * from time t", Time.class);
+		Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
 		Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
 		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
+		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+		query.setParameter(1, u.getId());
 		List<Time> values = query.getResultList();
 		
 		if (!values.isEmpty()) {
