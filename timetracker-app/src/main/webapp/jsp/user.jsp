@@ -144,8 +144,8 @@
 									try {
 										Query query;
 										db.getEntityManager().getTransaction().begin();	
-										query = db.getEntityManager().createNativeQuery("SELECT name FROM project WHERE id IN (SELECT project_id FROM projectmembers WHERE username = " + request.getAttribute("username") +")", Project.class);
-										
+										query = db.getEntityManager().createNativeQuery("SELECT name FROM project WHERE id IN (SELECT project_id FROM projectmembers WHERE username = ?)", Project.class);
+										query.setParameter(1, request.getAttribute("username"));
 										List<Project> values = query.getResultList();
 										
 										if (!values.isEmpty()) {

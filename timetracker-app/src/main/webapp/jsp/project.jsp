@@ -122,7 +122,7 @@
 									Query project = db
 											.getEntityManager()
 											.createNativeQuery(
-													"SELECT name, description FROM project WHERE id = ?",
+													"SELECT name, description, category FROM project WHERE id = ?",
 													Project.class);
 									project.setParameter(1, proId);
 									Project prj = (Project) project.getSingleResult();
@@ -141,19 +141,49 @@
 											<div class="col-md-3">
 												<label for="name">Name:</label> <input class="" type="text"
 													name="name" id="name"
-													value="<%out.println(prj.getName());%>" />
+													value="<%out.println(prj.getName());%>" size="30" />
 											</div>
-											<div class="col-md-7">
-												<label for="desc">Description:</label> <input type="hidden"
-													name="projectId" id="projectId"
-													value="<%out.println(request.getParameter("projectId"));%>" />
-												<input type="text" name="desc" id="desc" size="60"
-													value="<%out.println(prj.getDescription());%>" />
+											<div class="col-md-5">
+												<label for="desc">Description:</label> 
+												<input type="hidden" name="projectId" id="projectId" value="<%out.println(request.getParameter("projectId"));%>" />
+												<input type="text" name="desc" id="desc" size="60" value="<%out.println(prj.getDescription());%>" />
+											</div>
+											<div class="col-md-2">
+												<label for="desc">Category:</label> 
+												<select name="cat">
+													<%
+														if (prj.getCategory().equals("Development")) {
+															out.println("<option value=\"Development\" selected>Development</option>");
+														}
+														else {
+															out.println("<option value=\"Development\">Development</option>");
+														}
+														if (prj.getCategory().equals("Marketing")) {
+															out.println("<option value=\"Marketing\" selected>Marketing</option>");
+														}
+														else {
+															out.println("<option value=\"Marketing\">Marketing</option>");
+														}
+														if (prj.getCategory().equals("Sales")) {
+															out.println("<option value=\"Sales\" selected>Sales</option>");
+														}
+														else {
+															out.println("<option value=\"Sales\">Sales</option>");
+														}
+														if (prj.getCategory().equals("Organization")) {
+															out.println("<option value=\"Organization\" selected>Organization</option>");
+														}
+														else {
+															out.println("<option value=\"Organization\">Organization</option>");
+														}
+													%>												
+												</select>
 											</div>
 											<div class="col-md-2">
 												<label for="submit">&nbsp;</label>
-												<button type="submit"
-													class="btn btn-warning btn-fill btn-sm" name="submit">Update</button>
+												<button type="submit" class="btn btn-warning btn-fill btn-sm" name="submit">
+													Update
+												</button>
 											</div>
 										</div>
 									</form>
@@ -306,9 +336,7 @@
 																for (Task task : values) {
 																	out.println("<tr>");
 																    out.println("<td>" + task.getName() + "</td>");
-																    //out.println("<td>" + task.getCategory_id()+ "</td>");
-																    out.println("<td>" + task.getDescription() + "</td>");	            
-																    // ADD USER to Task out.println("<td><a href=\"project?projectId="+ prj.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
+																    out.println("<td>" + task.getDescription() + "</td>");	
 																    out.println("</tr>");
 																}
 															}
@@ -341,18 +369,26 @@
 								<div class="content">
 									<form method="post" action="project?action=add">
 										<div class="row">
-											<div class="col-md-3">
-												<label for="name">Name:</label> <input class="" type="text"
-													name="name" id="name">
+											<div class="col-md-2">
+												<label for="name">Name:</label> 
+												<input class="" type="text" name="name" id="name" size="20">
 											</div>
-											<div class="col-md-7">
-												<label for="desc">Description:</label> <input type="text"
-													name="desc" id="desc" size="60">
+											<div class="col-md-5">
+												<label for="desc">Description:</label> 
+												<input type="text" name="desc" id="desc" size="60">
 											</div>
 											<div class="col-md-2">
-												<label for="submit">&nbsp;</label>
-												<button type="submit"
-													class="btn btn-warning btn-fill btn-sm" name="submit">Create</button>
+												<label for="cat">Category:</label> 
+												<select name="cat">
+													<option value="Development">Development</option>
+													<option value="Marketing">Marketing</option>
+													<option value="Sales">Sales</option>
+													<option value="Organization">Organization</option>
+												</select>
+											</div>
+											<div class="col-md-3">
+												<label for="submit">&nbsp;<br /></label>
+												<button type="submit" class="btn btn-warning btn-fill btn-sm" name="submit">Create</button>
 											</div>
 										</div>
 									</form>
@@ -373,7 +409,8 @@
 											<th>ID</th>
 											<th>Name</th>
 											<th>Description</th>
-											<th>Add</th>
+											<th>Category</th>
+											<th>Edit/Add Task & Users</th>
 										</thead>
 										<tbody>
 											<%
@@ -391,6 +428,7 @@
 																out.println("<td>" + prj.getId() + "</td>");
 																out.println("<td>" + prj.getName() + "</td>");
 																out.println("<td>" + prj.getDescription() + "</td>");
+																out.println("<td>" + prj.getCategory() + "</td>");
 																out.println("<td><a href=\"project?projectId="
 																		+ prj.getId()
 																		+ "\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");

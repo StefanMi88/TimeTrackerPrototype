@@ -52,6 +52,7 @@ public class ProjectServlet extends HttpServlet {
 		
 		String name = req.getParameter("name");
 		String desc = req.getParameter("desc");
+		String cat = req.getParameter("cat");
 		String action = req.getParameter("action");
 		String projectId = req.getParameter("projectId");
 		System.out.println(action);
@@ -68,12 +69,12 @@ public class ProjectServlet extends HttpServlet {
 			
 			db.getEntityManager().getTransaction().begin();	 
 			Query queryMaxId = db.getEntityManager().createNativeQuery("SELECT MAX(id)FROM project");
-			Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO project (id, name, description) VALUES (?, ?, ?)");
+			Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO project (id, name, description, category) VALUES (?, ?, ?, ?)");
 			
 			try {
 				
 				Integer maxProjectId = (Integer)queryMaxId.getSingleResult();
-				Project prj = new Project(maxProjectId +1, name, desc);
+				Project prj = new Project(maxProjectId +1, name, desc, cat);
 				projectId = "" + (maxProjectId + 1);
 				
 				db.getEntityManager().getTransaction().commit();
@@ -81,6 +82,7 @@ public class ProjectServlet extends HttpServlet {
 				queryInsert.setParameter(1, prj.getId());
 				queryInsert.setParameter(2, prj.getName());
 				queryInsert.setParameter(3, prj.getDescription());
+				queryInsert.setParameter(4, prj.getCategory());
 				queryInsert.executeUpdate();
 				db.getEntityManager().getTransaction().commit();
 				
@@ -96,13 +98,14 @@ public class ProjectServlet extends HttpServlet {
 		else if (action.equals("edit")) {
 			db.getEntityManager().getTransaction().begin();	
 			projectId = req.getParameter("projectId");
-			Query queryUpdate = db.getEntityManager().createNativeQuery("UPDATE project SET name = ?, description = ? WHERE id = ?");
+			Query queryUpdate = db.getEntityManager().createNativeQuery("UPDATE project SET name = ?, description = ?, category = ? WHERE id = ?");
 			try {
 				//projectId = (String) query.getSingleResult();
 				// Insert new Project in DB
 				queryUpdate.setParameter(1, name);
 				queryUpdate.setParameter(2, desc);
-				queryUpdate.setParameter(3, projectId);
+				queryUpdate.setParameter(3, cat);
+				queryUpdate.setParameter(4, projectId);
 				queryUpdate.executeUpdate();
 				db.getEntityManager().getTransaction().commit();
 				

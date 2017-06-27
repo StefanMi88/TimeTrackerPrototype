@@ -18,16 +18,20 @@ public class Project {
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@Column(name = "CATEGORY")
+	private String category;
 
 	
 	public Project() {
 		super();
 	}
 
-	public Project(int id, String name, String description) {
+	public Project(int id, String name, String description, String category) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.category = category;
 	}
 
 	public String getName() {
@@ -44,6 +48,14 @@ public class Project {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 
 	public int getId() {
