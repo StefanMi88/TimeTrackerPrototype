@@ -125,7 +125,68 @@
                 </div>
             </div>
         </nav>
-        <div class="content">
+        <div class="content"><%
+        	if (request.getParameter("editTimeId") != null) {
+        		%>
+        		<div class="container-fluid" id="edit">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Edit time record</h4>
+                                <p class="category">Update start and end time</p>
+                                <div class="content table-responsive table-full-width">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    	<th>Start</th>
+                                    	<th>Stop</th>
+                                    	<th>&nbsp;</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <form method="post" action="startTime?type=edit"> 
+                                                        <%
+															try {
+																String taskId = request.getParameter("editTimeId");
+																db.getEntityManager().getTransaction().begin();	 
+																Query query = db.getEntityManager().createNativeQuery("SELECT start, end FROM time WHERE task_id = ?", Time.class);
+																query.setParameter(1, taskId);
+																List<Time> values = query.getResultList();
+																
+																if (values != null)
+																{
+																	for (Time time : values) {
+																		out.println("<td id=\"start\"><input type=\"text\" name=\"start\" id=\"start\" value=\""+ time.getStart() + "\" /></td>");
+																		out.println("<td id=\"end\"><input type=\"text\" name=\"end\" id=\"end\" value=\""+ time.getEnd() + "\" /></td>");
+																	}
+																}
+															} catch (Exception ex) {
+																 out.println(ex.getMessage());
+															}
+														 	finally
+														 	{
+														 		db.getEntityManager().getTransaction().commit();
+														 	}
+														%>
+                                                <td><button class="btn btn-warning btn-fill btn-sm">Update</button></td>
+                                            </form>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                
+								<div class="control-group error">
+		      						<span class="help-inline"><% if(request.getAttribute("errorMessage")!=null) {out.println(request.getAttribute("errorMessage"));}%></span>
+		    					</div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        		<%
+        	}
+        	else {
+        	%>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -350,6 +411,7 @@
                                         <th>From</th>
                                         <th>To</th>
                                         <th>Duration</th>
+                                        <th>Edit</th>
                                     </thead>
                                     <tbody>
 <%
@@ -395,6 +457,9 @@
 	            else {
 	            	out.println("<td>in progress</td>");	
 	            }
+	            out.println("<td><a href=\"tracker?editTimeId="
+						+ t.getId()
+						+ "\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
 	            out.println("</tr>");
 			}
 		}
@@ -415,6 +480,7 @@
                 </div>
             </div>
         </div>
+        <% } %>
 
         <footer class="footer">
             <div class="container-fluid">
