@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 27. Jun 2017 um 18:19
+-- Erstellungszeit: 28. Jun 2017 um 20:47
 -- Server-Version: 10.1.21-MariaDB
 -- PHP-Version: 5.6.30
 
@@ -58,10 +58,7 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`id`, `name`, `description`, `category`) VALUES
-(2, 'projecta', 'vdvdfvcvcv', 'Development'),
-(3, 'test', 'max65', 'Development'),
-(4, 'Test Project', 'Test from Stefan', 'Sales'),
-(5, 'Test Category', 'Category Marketing', 'Marketing');
+(1, 'TimeTracker Prototype', 'Create a time tracker prototype as Java webapp', 'Development');
 
 -- --------------------------------------------------------
 
@@ -87,7 +84,8 @@ INSERT INTO `projectmembers` (`id`, `username`, `project_id`, `admin`) VALUES
 (37, 'admin2', 3, 0),
 (38, 'oliver', 3, 0),
 (40, 'admin', 2, 0),
-(41, 'admin2', 2, 0);
+(41, 'admin2', 2, 0),
+(42, 'admin', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -107,15 +105,8 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `name`, `description`, `project_id`) VALUES
-(13, 'test', 'test', 4),
-(15, 'test2', 'test2', 4),
-(16, 'aetaet', 'aetaet', 4),
-(17, 'teatewtat', 'test3235', 4),
-(18, 'afe', 'aef', 4),
-(19, 'afef', 'afef', 4),
-(20, 'aefa', 'aef', 4),
-(21, 'test', 'test', 3),
-(22, 'testTaskA', 'testTaskA', 2);
+(1, ' Frontend', 'Develop Frontend', 1),
+(2, 'Backend', 'Develop Backend', 1);
 
 -- --------------------------------------------------------
 
@@ -135,15 +126,8 @@ CREATE TABLE `time` (
 --
 
 INSERT INTO `time` (`task_id`, `user_id`, `start`, `end`) VALUES
-(3, 1, '2017-06-19 14:16:28', '2017-06-19 14:16:34'),
-(5, 1, '2017-06-21 16:11:34', '2017-06-21 16:13:09'),
-(6, 1, '2017-06-19 14:15:31', '2017-06-19 14:16:39'),
-(8, 1, '2017-06-19 14:11:43', '2017-06-19 14:15:26'),
-(12, 1, '2017-06-19 14:10:58', '2017-06-19 14:11:26'),
-(12, 1, '2017-06-19 14:16:42', '2017-06-19 14:16:46'),
-(13, 1, '2017-06-21 16:18:32', '2017-06-21 16:18:34'),
-(13, 1, '2017-06-21 16:18:37', '2017-06-21 16:18:40'),
-(18, 1, '2017-06-24 12:19:22', '2017-06-24 12:19:29');
+(1, 2, '2017-06-28 18:41:03', '2017-06-28 18:46:35'),
+(2, 2, '2017-06-27 15:00:00', '2017-06-27 19:00:00');
 
 -- --------------------------------------------------------
 
@@ -172,11 +156,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `type`, `company`, `email`, `firstname`, `lastname`, `address`, `city`, `country`, `zip`, `aboutme`) VALUES
-(1, 'max1', 'admin', 'admin', '', '', '', '', '', '', '', '', ''),
-(2, 'admin', 'admin', 'admin', '', '', '', '', '', '', '', '', ''),
-(3, 'max', 'max', 'user', 'jks', 'jkldj@gmx.at', 'jj', 'jij', 'joij', 'jio', 'jlkj', '', 'jiojjjjoijoji'),
-(4, 'admin2', 'admin', 'USER', 'ds', 'sd@gmal.at', 'dsd', 'sds', 'dsds', 'vdv', 'dfd', 'fdfd', '\'\'\'\'dffdf'),
-(5, 'oliver', 'oliver', 'ADMIN', 'jku', 'oo@gmx.at', 'oliver', 'obern', 'natternbach', 'linz', 'at', '4040', 'wappla');
+(2, 'admin', 'admin', 'admin', 'JKU', 'admin@jku.at', 'Stefan', 'Mitmansgruber', 'Wimmer-Höhe 14', 'Gutau', 'AT', '4293', 'Testadmin!'),
+(6, 'JuliaP', 'test', 'USER', 'Sparkasse OÖ', 'julia@test.at', 'Julia', 'Pammer', 'Wimmer-Höhe 14', 'Gutau', 'Österreich', '4293', 'Testuser');
 
 --
 -- Indizes der exportierten Tabellen
@@ -226,12 +207,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `projectmembers`
 --
 ALTER TABLE `projectmembers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
