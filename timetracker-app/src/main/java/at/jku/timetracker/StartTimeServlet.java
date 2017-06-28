@@ -2,6 +2,7 @@ package at.jku.timetracker;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -39,20 +40,35 @@ public class StartTimeServlet extends HttpServlet{
 			db = (DatabaseConnector) this.getServletContext().getAttribute(
 					TimeTracker.DBConnector);
 		}
-		if (action.equals("manual")) {
+		if (action!=null && action.equals("manual")) {
 			try {
-				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO time (task_id, user_id, start, end) VALUES (?, ?, ?, ?)");
+				Timestamp start = Timestamp.valueOf(req.getParameter("start").replace("T", " ").concat(":00"));
+				Timestamp end = Timestamp.valueOf(req.getParameter("end").replace("T", " ").concat(":00"));
 				
+				long duration;
+				long diffInMillies = end.getTime()- start.getTime();
+				TimeUnit tu = TimeUnit.MINUTES;
+				duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
 				db.getEntityManager().getTransaction().begin();
-				queryInsert.setParameter(1, req.getParameter("task"));
-				queryInsert.setParameter(2, u.getId());
-				queryInsert.setParameter(3, req.getParameter("start").replace("T", " ").concat(":00"));
-				queryInsert.setParameter(4, req.getParameter("end").replace("T", " ").concat(":00"));
-				queryInsert.executeUpdate();
-				db.getEntityManager().getTransaction().commit();
-			} catch (Exception e) {
-				db.getEntityManager().getTransaction().commit();
-			}
+				if (duration > 0) {
+					Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO time (task_id, user_id, start, end) VALUES (?, ?, ?, ?)");
+			
+					queryInsert.setParameter(1, req.getParameter("task"));
+					queryInsert.setParameter(2, u.getId());
+					queryInsert.setParameter(3, start);
+					queryInsert.setParameter(4, end);
+					queryInsert.executeUpdate();
+					db.getEntityManager().getTransaction().commit();
+				}
+				else {
+					req.setAttribute("errorMessage", "End timestamp must be before start timestamp!");
+					RequestDispatcher dispatcher = getServletContext()
+							.getRequestDispatcher("/jsp/tracker.jsp");
+					dispatcher.forward(req, resp);
+					db.getEntityManager().getTransaction().commit();
+					return;
+				}
+			} catch (Exception e) {}
 			
 			String nextJSP = "/jsp/tracker.jsp";
 			RequestDispatcher dispatcher = getServletContext()

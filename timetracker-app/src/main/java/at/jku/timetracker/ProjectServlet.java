@@ -73,6 +73,7 @@ public class ProjectServlet extends HttpServlet {
 			try {
 				
 				Integer maxProjectId = (Integer)queryMaxId.getSingleResult();
+				if (maxProjectId == null) maxProjectId = 0;
 				Project prj = new Project(maxProjectId +1, name, desc, cat);
 				projectId = "" + (maxProjectId + 1);
 				
