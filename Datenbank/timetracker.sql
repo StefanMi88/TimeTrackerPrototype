@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Jun 2017 um 20:47
+-- Erstellungszeit: 28. Jun 2017 um 21:21
 -- Server-Version: 10.1.21-MariaDB
 -- PHP-Version: 5.6.30
 
@@ -115,6 +115,7 @@ INSERT INTO `task` (`id`, `name`, `description`, `project_id`) VALUES
 --
 
 CREATE TABLE `time` (
+  `id` int(11) NOT NULL,
   `task_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -125,9 +126,9 @@ CREATE TABLE `time` (
 -- Daten für Tabelle `time`
 --
 
-INSERT INTO `time` (`task_id`, `user_id`, `start`, `end`) VALUES
-(1, 2, '2017-06-28 18:41:03', '2017-06-28 18:46:35'),
-(2, 2, '2017-06-27 15:00:00', '2017-06-27 19:00:00');
+INSERT INTO `time` (`id`, `task_id`, `user_id`, `start`, `end`) VALUES
+(1, 1, 2, '2017-06-28 18:41:03', '2017-06-28 18:46:35'),
+(2, 2, 2, '2017-06-27 15:00:00', '2017-06-27 19:00:00');
 
 -- --------------------------------------------------------
 
@@ -191,7 +192,7 @@ ALTER TABLE `task`
 -- Indizes für die Tabelle `time`
 --
 ALTER TABLE `time`
-  ADD PRIMARY KEY (`task_id`,`user_id`,`start`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indizes für die Tabelle `user`
@@ -208,6 +209,11 @@ ALTER TABLE `user`
 --
 ALTER TABLE `projectmembers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+--
+-- AUTO_INCREMENT für Tabelle `time`
+--
+ALTER TABLE `time`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
