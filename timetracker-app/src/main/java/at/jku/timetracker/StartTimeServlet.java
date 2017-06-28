@@ -76,6 +76,40 @@ public class StartTimeServlet extends HttpServlet{
 			dispatcher.forward(req, resp);
 			return;
 		}
+		if (action!=null && action.equals("edit")) {
+			try {
+				Timestamp start = Timestamp.valueOf(req.getParameter("start"));
+				Timestamp end = Timestamp.valueOf(req.getParameter("end"));
+				long duration;
+				long diffInMillies = end.getTime()- start.getTime();
+				TimeUnit tu = TimeUnit.MINUTES;
+				duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
+				db.getEntityManager().getTransaction().begin();
+				if (duration > 0) {
+					Query queryInsert = db.getEntityManager().createNativeQuery("UPDATE time SET start = ?, end = ? WHERE id = ?");
+			
+					queryInsert.setParameter(1, req.getParameter("start"));
+					queryInsert.setParameter(2, req.getParameter("end"));
+					queryInsert.setParameter(3, req.getParameter("id"));
+					queryInsert.executeUpdate();
+					db.getEntityManager().getTransaction().commit();
+				}
+				else {
+					req.setAttribute("errorMessage", "End timestamp must be before start timestamp!");
+					RequestDispatcher dispatcher = getServletContext()
+							.getRequestDispatcher("/jsp/tracker.jsp");
+					dispatcher.forward(req, resp);
+					db.getEntityManager().getTransaction().commit();
+					return;
+				}
+			} catch (Exception e) {}
+			
+			String nextJSP = "/jsp/tracker.jsp";
+			RequestDispatcher dispatcher = getServletContext()
+					.getRequestDispatcher(nextJSP);
+			dispatcher.forward(req, resp);
+			return;
+		}
 		//automatic
 		else {
 			int taskId;

@@ -147,10 +147,10 @@
                                             <form method="post" action="startTime?type=edit"> 
                                                         <%
 															try {
-																String taskId = request.getParameter("editTimeId");
+																String timeId = request.getParameter("editTimeId");
 																db.getEntityManager().getTransaction().begin();	 
-																Query query = db.getEntityManager().createNativeQuery("SELECT start, end FROM time WHERE task_id = ?", Time.class);
-																query.setParameter(1, taskId);
+																Query query = db.getEntityManager().createNativeQuery("SELECT * FROM time WHERE id = ?", Time.class);
+																query.setParameter(1, timeId);
 																List<Time> values = query.getResultList();
 																
 																if (values != null)
@@ -158,6 +158,7 @@
 																	for (Time time : values) {
 																		out.println("<td id=\"start\"><input type=\"text\" name=\"start\" id=\"start\" value=\""+ time.getStart() + "\" /></td>");
 																		out.println("<td id=\"end\"><input type=\"text\" name=\"end\" id=\"end\" value=\""+ time.getEnd() + "\" /></td>");
+																		out.println("<input type=\"hidden\" name=\"id\" id=\"id\" value=\""+ timeId + "\" />");
 																	}
 																}
 															} catch (Exception ex) {
@@ -451,15 +452,15 @@
 	            else {
 	            	out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	 
 	            }
-	            if (duration != 0) {
-		            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>"); 
+	            if (duration == 0) {
+	            	out.println("<td>in progress</td>");
 	            }
 	            else {
-	            	out.println("<td>in progress</td>");	
+		            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>"); 	
 	            }
 	            out.println("<td><a href=\"tracker?editTimeId="
-						+ t.getId()
-						+ "\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
+						+ time.getId()
+						+ "\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
 	            out.println("</tr>");
 			}
 		}

@@ -12,6 +12,9 @@ import javax.persistence.Table;
 public class Time {
 
 	@Id
+	@Column(name = "ID")
+	private int id;
+	
 	@Column(name = "TASK_ID")
 	private int task_id;
 	
@@ -38,7 +41,13 @@ public class Time {
 		this.start = start;
 		this.end = end;
 	}
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 	public int getTask_id() {
 		return task_id;
 	}
