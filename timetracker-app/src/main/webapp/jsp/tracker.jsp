@@ -40,8 +40,16 @@
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="css/pe-icon-7-stroke.css" rel="stylesheet" />
-
+    <link href="css/pe-icon-7-stroke.css" rel="stylesheet" /> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){
+		$("#manual").hide();
+		$("#btn_manual").click(function(){
+		    $("#manual").toggle();
+		});
+	});
+	</script>
 </head>
 <body>
 <%
@@ -156,6 +164,113 @@
 																String taskId = null;
 																try{
 			                                                        taskId = this.getServletContext().getAttribute("taskId").toString();
+			                                                    	if (taskId != null){
+			                                                           	out.println("disabled");
+			                                                        }
+			                                                    	
+			                                                    	}catch(Exception e){}
+																
+																	String project = request.getParameter("project");
+																	//Test
+																	db.getEntityManager().getTransaction().begin();	 
+																	
+																	Query query;
+																	if (project == null || project.isEmpty()) {
+																		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+																		query = db.getEntityManager().createNativeQuery("SELECT name, id FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);																		
+																	}
+																	else {																	
+																		query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																	}	
+																	
+																	query.setParameter(1, project);
+																	List<Task> values = query.getResultList();
+
+																	String btn;
+																	if (values != null)
+																	{
+																		for (Task task : values) {
+																			if (taskId != null && task.getId() == Integer.valueOf(taskId)){
+																	            out.println("<option value=\"" + task.getId() + "\" selected>");
+																	            out.println("" + task.getName() + "</option>");
+																			}
+																			else{
+																				out.println("<option value=\"" + task.getId() + "\" >");
+																	            out.println("" + task.getName() + "</option>");
+																	        }
+																		}
+																	}
+																%>
+			                                                    </select>
+				                                                </td>
+				                                                <td id="curtime"></td>
+				                                                <td><button class="pe-7s-play btn btn-warning btn-fill btn-sm"></button></td>
+			                                            	</form>															
+															<%	
+																
+															}
+															catch (Exception ex) {
+																 out.println(ex.getMessage());
+															}
+														 	finally
+														 	{
+														 		db.getEntityManager().getTransaction().commit();
+														 	}
+														%>
+                                        </tr>
+                                        <script>
+                                            var currentdate = new Date();
+                                            var time = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+                                            document.getElementById("curtime").innerHTML = time;
+                                        </script>
+                                        <tr>
+                                        	<td colspan="3"><button  class="btn btn-warning btn-fill btn-sm" id="btn_manual"><span class="fa fa-edit"></span>add recording manually</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="container-fluid" id="manual">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Add record manually</h4>
+                                <p class="category">Fill out form to add a record manually</p>
+                                <div class="content table-responsive table-full-width">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                    	<th>Task</th>
+                                    	<th>Start</th>
+                                    	<th>Stop</th>
+                                    	<th>&nbsp;</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <form method="post" action="startTime?type=manual">
+                                            
+                                                <td>
+                                                    <select name="task" id="task"  <% 
+                                                    
+                                                    try{
+                                                        String taskId = this.getServletContext().getAttribute("taskId").toString();
+                                                    		if (taskId != null){
+                                                            	out.println("disabled");
+                                                            }
+                                                    		
+                                                    		}catch(Exception e){
+                                                    	
+                                                    }
+                                                    
+                                                    %>>
+                                                        <%
+															try {
+																String taskId = null;
+																try{
+			                                                        taskId = this.getServletContext().getAttribute("taskId").toString();
 			                                                    		if (taskId != null){
 			                                                            	out.println("disabled");
 			                                                            }
@@ -202,20 +317,18 @@
 														%>
                                                     </select>
                                                 </td>
-                                                <td id="curtime"></td>
-                                                <td><button class="pe-7s-play btn btn-warning btn-fill btn-sm"></button></td>
+                                                <td id="start"><input type="datetime-local" name="start" id="start" /></td>
+                                                <td id="end"><input type="datetime-local" name="end" id="end" /></td>
+                                                <td><button class="btn btn-warning btn-fill btn-sm">Save</button></td>
                                             </form>
-                                        </tr>
-                                        <script>
-                                            var currentdate = new Date();
-                                            var time = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-                                            document.getElementById("curtime").innerHTML = time;
-                                        </script>
-                                        <tr>
-                                        	<td colspan="3"><button  class="btn btn-warning btn-fill btn-sm"><span class="fa fa-edit"></span>add recording manually</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                
+								<div class="control-group error">
+		      						<span class="help-inline"><% if(request.getAttribute("errorMessage")!=null) {out.println(request.getAttribute("errorMessage"));}%></span>
+		    					</div>
+                            </div>
                             </div>
                         </div>
                     </div>
