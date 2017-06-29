@@ -2,6 +2,7 @@ package at.jku.timetracker;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -57,7 +58,9 @@ public class DashboardServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		FileWriter w = new FileWriter("/download.csv");
+		
+		String filename = "c:\\csv\\download.csv";
+		FileWriter w = new FileWriter(filename);
 		try {
 			db.getEntityManager().getTransaction().begin();	 
 			Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
@@ -95,9 +98,28 @@ public class DashboardServlet extends HttpServlet {
 		            out.println("</tr>");
 		            */
 					
-					CSVUtils.writeLine(w, Arrays.asList(p.getName(),t.getName(),time.getStart().toString(),TimeTracker.NVL(time.getEnd(), "").toString()));
+					w.append(p.getName());
+					w.append(',');
+					w.append(t.getName());
+					w.append(',');
+					w.append(time.getStart().toString());
+					w.append(',');
+					w.append(TimeTracker.NVL(time.getEnd(), "").toString());
+					w.append(',');
+					w.append(duration/60 + "h "+ duration%60  + "min");
+					w.append('\n');
+					
+					//CSVUtils.writeLine(w, Arrays.asList(p.getName(),t.getName(),time.getStart().toString(),TimeTracker.NVL(time.getEnd(), "").toString()));
 					
 				}
+				
+				//String filenames = req.getPathInfo().substring(1); // get rid of leading `/`
+				resp.setHeader("Content-Type", "text/csv");
+				resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+				PrintWriter writer = resp.getWriter();
+				
+				w.flush();
+				w.close();
 			}
 			
 		}
