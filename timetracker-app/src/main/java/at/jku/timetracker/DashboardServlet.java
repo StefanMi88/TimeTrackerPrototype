@@ -59,8 +59,12 @@ public class DashboardServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		String filename = "c:\\csv\\download.csv";
-		FileWriter w = new FileWriter(filename);
+		
+		String filename = "download.csv";
+		resp.setHeader("Content-Type", "text/csv");
+		resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+		PrintWriter writer = resp.getWriter();
+		
 		try {
 			db.getEntityManager().getTransaction().begin();	 
 			Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
@@ -87,39 +91,24 @@ public class DashboardServlet extends HttpServlet {
 					
 					queryProj.setParameter(1, t.getProject_id());
 					Project p = (Project)queryProj.getSingleResult();
-					/*out.println("<tr>");
-					out.println("<td>" + p.getName()+ "</td>");
-		            out.println("<td>" + t.getName() + "</td>");
-		            out.println("<td>" + time.getStart() + "</td>");
-		            out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
-		            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
-		            //out.println("<td><a href=\"#\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
-		            //out.println("<td><a href=\"project?projectId="+ time.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
-		            out.println("</tr>");
-		            */
+										
+					writer.append(p.getName());
+					writer.append(',');
+					writer.append(t.getName());
+					writer.append(',');
+					writer.append(time.getStart().toString());
+					writer.append(',');
+					writer.append(TimeTracker.NVL(time.getEnd(), "").toString());
+					writer.append(',');
+					writer.append(duration/60 + "h "+ duration%60  + "min");
+					writer.append('\n');
 					
-					w.append(p.getName());
-					w.append(',');
-					w.append(t.getName());
-					w.append(',');
-					w.append(time.getStart().toString());
-					w.append(',');
-					w.append(TimeTracker.NVL(time.getEnd(), "").toString());
-					w.append(',');
-					w.append(duration/60 + "h "+ duration%60  + "min");
-					w.append('\n');
-					
-					//CSVUtils.writeLine(w, Arrays.asList(p.getName(),t.getName(),time.getStart().toString(),TimeTracker.NVL(time.getEnd(), "").toString()));
 					
 				}
 				
-				//String filenames = req.getPathInfo().substring(1); // get rid of leading `/`
-				resp.setHeader("Content-Type", "text/csv");
-				resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
-				PrintWriter writer = resp.getWriter();
+				writer.flush();
+				writer.close();
 				
-				w.flush();
-				w.close();
 			}
 			
 		}
