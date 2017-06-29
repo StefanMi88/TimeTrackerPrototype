@@ -9,8 +9,8 @@ public class CSVUtils {
 	
 	 private static final char DEFAULT_SEPARATOR = ',';
 
-	    public static void writeLine(Writer w, List<String> values) throws IOException {
-	        writeLine(w, values, DEFAULT_SEPARATOR, ' ');
+	    public static void writeLine(Writer w, List<String> list) throws IOException {
+	        writeLine(w, list, DEFAULT_SEPARATOR, ' ');
 	    }
 
 	    public static void writeLine(Writer w, List<String> values, char separators) throws IOException {
@@ -18,9 +18,9 @@ public class CSVUtils {
 	    }
 
 	    //https://tools.ietf.org/html/rfc4180
-	    private static String followCVSformat(String value) {
+	    private static String followCVSformat(Object value) {
 
-	        String result = value;
+	        String result = (String) value;
 	        if (result.contains("\"")) {
 	            result = result.replace("\"", "\"\"");
 	        }
@@ -39,7 +39,7 @@ public class CSVUtils {
 	        }
 
 	        StringBuilder sb = new StringBuilder();
-	        for (String value : values) {
+	        for (Object value : values) {
 	            if (!first) {
 	                sb.append(separators);
 	            }
