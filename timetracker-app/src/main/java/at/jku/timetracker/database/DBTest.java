@@ -1,10 +1,15 @@
 package at.jku.timetracker.database;
 
+import org.junit.Test;
+
+import junit.framework.TestCase;
 import at.jku.timetracker.model.User;
 
-public class DBTest {
+public class DBTest extends TestCase{
 
-	public static void main(String[] args) {
+	@Test
+	public void testDb(){
+		
 		System.out.println("Start Test");
 		
 		DatabaseConnector db = new DatabaseConnector();
@@ -33,6 +38,11 @@ public class DBTest {
 		db.getEntityManager().getTransaction().begin();
 		db.getEntityManager().createQuery("Delete from User u where u.username = 'test'").executeUpdate();
 		db.getEntityManager().getTransaction().commit();
-
+		
 	}
+	
+	/*public static void main(String[] args) {
+		
+
+	}*/
 }
