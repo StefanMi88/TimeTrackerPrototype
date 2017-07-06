@@ -52,10 +52,10 @@ public class LoginServlet extends HttpServlet {
 		Query selectUserQuery = db.getEntityManager().createNativeQuery(
 				"Select * from user u where u.username = ?", User.class);
 		selectUserQuery.setParameter(1, username);
+
 		try {
 			u = (User) selectUserQuery.getSingleResult();
 		} catch (NoResultException ex) {
-			
 			db.getEntityManager().getTransaction().commit();
 			req.setAttribute("errorMessage", "User existiert nicht!!");
 			String nextJSP = "/jsp/login.jsp";
@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet {
 			dispatcher.forward(req, resp);
 			return;
 		}
-		
+
 		db.getEntityManager().getTransaction().commit();
 
 		if (u.getPassword().equals(password)) {

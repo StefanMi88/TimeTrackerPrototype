@@ -149,9 +149,9 @@
 															try {
 																String timeId = request.getParameter("editTimeId");
 																db.getEntityManager().getTransaction().begin();	 
-																Query query = db.getEntityManager().createNativeQuery("SELECT * FROM time WHERE id = ?", Time.class);
-																query.setParameter(1, timeId);
-																List<Time> values = query.getResultList();
+																Query queryTime = db.getEntityManager().createNativeQuery("SELECT * FROM time WHERE id = ?", Time.class);
+																queryTime.setParameter(1, timeId);
+																List<Time> values = queryTime.getResultList();
 																
 																if (values != null)
 																{
@@ -232,21 +232,20 @@
 			                                                    	
 			                                                    	}catch(Exception e){}
 																
-																	String project = request.getParameter("project");
-																	//Test
+																	String project = request.getParameter("project");	
 																	db.getEntityManager().getTransaction().begin();	 
 																	
-																	Query query;
+																	Query queryTask;
 																	if (project == null || project.isEmpty()) {
 																		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-																		query = db.getEntityManager().createNativeQuery("SELECT name, id FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);																		
+																		queryTask = db.getEntityManager().createNativeQuery("SELECT name, id FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);																		
 																	}
 																	else {																	
-																		query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																		queryTask = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
 																	}	
 																	
-																	query.setParameter(1, project);
-																	List<Task> values = query.getResultList();
+																	queryTask.setParameter(1, project);
+																	List<Task> values = queryTask.getResultList();
 
 																	String btn;
 																	if (values != null)
@@ -340,20 +339,19 @@
 			                                                    		}catch(Exception e){}
 																
 																String project = request.getParameter("project");
-																//Test
 																db.getEntityManager().getTransaction().begin();	 
 																
-																Query query;
+																Query queryTask;
 																if (project == null || project.isEmpty()) {
 																	User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-																	query = db.getEntityManager().createNativeQuery("SELECT name, id FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);
+																	queryTask = db.getEntityManager().createNativeQuery("SELECT name, id FROM task WHERE project_id IN (SELECT project_id FROM projectmembers WHERE username = '" + u.getUsername() +"')", Task.class);
 																}
 																else {																	
-																	query = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
+																	queryTask = db.getEntityManager().createNativeQuery("Select * from Task t where t.PROJECT_ID = ?", Task.class);
 																}	
 																
-																query.setParameter(1, project);
-																List<Task> values = query.getResultList();
+																queryTask.setParameter(1, project);
+																List<Task> values = queryTask.getResultList();
 																
 																if (values != null)
 																{
@@ -418,16 +416,15 @@
 <%
 	try {
 		db.getEntityManager().getTransaction().begin();	 
-		Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
+		Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
 		Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
 		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
 		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-		query.setParameter(1, u.getId());
-		List<Time> values = query.getResultList();
+		queryTime.setParameter(1, u.getId());
+		List<Time> values = queryTime.getResultList();
 		
 		if (!values.isEmpty()) {
-			//out.println(values.size());
-			//Display values
+
 			long duration;
 			for (Time time : values) {
 				if(time.getEnd() != null){
@@ -452,7 +449,7 @@
 	            else {
 	            	out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	 
 	            }
-	            if (duration == 0) {
+	            if (time.getEnd() == null) {
 	            	out.println("<td>in progress</td>");
 	            }
 	            else {

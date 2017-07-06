@@ -1,6 +1,5 @@
 package at.jku.timetracker;
 
-
 import java.io.IOException;
 
 import javax.persistence.Query;
@@ -15,17 +14,18 @@ import at.jku.timetracker.database.DatabaseConnector;
 import at.jku.timetracker.model.User;
 
 @SuppressWarnings("serial")
-@WebServlet(name = "UserServlet", urlPatterns = { "/user"})
+@WebServlet(name = "UserServlet", urlPatterns = { "/user" })
 public class UserServlet extends HttpServlet {
 
 	private User user = null;
 	private DatabaseConnector db = null;
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
-		if ((user = (User) this.getServletContext().getAttribute(TimeTracker.User)) == null) {
+		if ((user = (User) this.getServletContext().getAttribute(
+				TimeTracker.User)) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
@@ -36,7 +36,7 @@ public class UserServlet extends HttpServlet {
 			db = (DatabaseConnector) this.getServletContext().getAttribute(
 					TimeTracker.DBConnector);
 		}
-		
+
 		req.setAttribute("username", user.getUsername());
 		req.setAttribute("firstname", user.getFirstName());
 		req.setAttribute("country", user.getCountry());
@@ -47,19 +47,20 @@ public class UserServlet extends HttpServlet {
 		req.setAttribute("company", user.getCompany());
 		req.setAttribute("email", user.getEmail());
 		req.setAttribute("aboutme", user.getAboutMe());
-		
+
 		String nextJSP = "/jsp/user.jsp";
 		RequestDispatcher dispatcher = getServletContext()
 				.getRequestDispatcher(nextJSP);
 		dispatcher.forward(req, resp);
 
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-		if ((user = (User) this.getServletContext().getAttribute(TimeTracker.User)) == null) {
+
+		if ((user = (User) this.getServletContext().getAttribute(
+				TimeTracker.User)) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
@@ -70,19 +71,15 @@ public class UserServlet extends HttpServlet {
 			db = (DatabaseConnector) this.getServletContext().getAttribute(
 					TimeTracker.DBConnector);
 		}
-		
+
 		db.getEntityManager().getTransaction().begin();
-		
-		Query updateUserQuery = db.getEntityManager().createNativeQuery("Update user u set u.firstname = ?, "
-				+ " u.country = ?, "
-				+ " u.lastname = ?, "
-				+ " u.zip = ?, "
-				+ " u.address = ?, "
-				+ " u.city = ?, "
-				+ " u.company = ?, "
-				+ " u.email = ?, "
-				+ " u.aboutme = ?"
-				+ " where u.username = ?");
+
+		Query updateUserQuery = db.getEntityManager().createNativeQuery(
+				"Update user u set u.firstname = ?, " + " u.country = ?, "
+						+ " u.lastname = ?, " + " u.zip = ?, "
+						+ " u.address = ?, " + " u.city = ?, "
+						+ " u.company = ?, " + " u.email = ?, "
+						+ " u.aboutme = ?" + " where u.username = ?");
 
 		updateUserQuery.setParameter(1, req.getParameter("firstname"));
 		updateUserQuery.setParameter(2, req.getParameter("country"));
@@ -94,22 +91,22 @@ public class UserServlet extends HttpServlet {
 		updateUserQuery.setParameter(8, req.getParameter("email"));
 		updateUserQuery.setParameter(9, req.getParameter("aboutme"));
 		updateUserQuery.setParameter(10, user.getUsername());
-		
+
 		updateUserQuery.executeUpdate();
 		db.getEntityManager().getTransaction().commit();
 		db.getEntityManager().getTransaction().begin();
-		
+
 		Query selectUserQuery = db.getEntityManager().createNativeQuery(
 				"Select * from user u where u.username = ?", User.class);
 		selectUserQuery.setParameter(1, user.getUsername());
 		User u = (User) selectUserQuery.getSingleResult();
 		this.getServletContext().setAttribute(TimeTracker.User, u);
-		
+
 		db.getEntityManager().getTransaction().commit();
-		
+
 		resp.sendRedirect(req.getContextPath() + "/user");
 		return;
-		
+
 	}
 
 }

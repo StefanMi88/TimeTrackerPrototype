@@ -8,27 +8,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TIME")
+@Table(name = "TIME")
 public class Time {
 
 	@Id
 	@Column(name = "ID")
 	private int id;
-	
+
 	@Column(name = "TASK_ID")
 	private int task_id;
-	
+
 	@Column(name = "USER_ID")
 	private int user_id;
-	
+
 	@Column(name = "START")
 	private Timestamp start;
-	
+
 	@Column(name = "END")
 	private Timestamp end;
-	
-	
-	
 
 	public Time() {
 		super();
@@ -41,6 +38,7 @@ public class Time {
 		this.start = start;
 		this.end = end;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -48,6 +46,7 @@ public class Time {
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public int getTask_id() {
 		return task_id;
 	}
@@ -80,5 +79,4 @@ public class Time {
 		this.end = end;
 	}
 
-	
 }

@@ -26,7 +26,7 @@ import at.jku.timetracker.model.User;
 @SuppressWarnings("serial")
 @WebServlet(name = "DashboardServlet", urlPatterns = { "/dashboard" })
 public class DashboardServlet extends HttpServlet {
-	
+
 	DatabaseConnector db;
 
 	@Override
@@ -37,8 +37,6 @@ public class DashboardServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
-
-		
 
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
@@ -54,44 +52,55 @@ public class DashboardServlet extends HttpServlet {
 		dispatcher.forward(req, resp);
 
 	}
-	
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
-		
+
 		String filename = "download.csv";
 		resp.setHeader("Content-Type", "text/csv");
-		resp.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+		resp.setHeader("Content-Disposition", "attachment; filename=\""
+				+ filename + "\"");
 		PrintWriter writer = resp.getWriter();
-		
+
 		try {
-			db.getEntityManager().getTransaction().begin();	 
-			Query query = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
-			Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
-			Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
-			User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-			query.setParameter(1, u.getId());
-			List<Time> values = query.getResultList();
-			
+
+			db.getEntityManager().getTransaction().begin();
+
+			Query queryTime = db.getEntityManager().createNativeQuery(
+					"Select * from time t where user_id = ?1", Time.class);
+			Query queryProj = db.getEntityManager().createNativeQuery(
+					"Select * from Project where id = ?1", Project.class);
+			Query queryTask = db.getEntityManager().createNativeQuery(
+					"Select * from Task where id = ?1", Task.class);
+			User u = (User) this.getServletContext().getAttribute(
+					TimeTracker.User);
+
+			queryTime.setParameter(1, u.getId());
+			List<Time> values = queryTime.getResultList();
+
 			if (!values.isEmpty()) {
-				//out.println(values.size());
-				//Display values
+
 				long duration;
+
 				for (Time time : values) {
-					if(time.getEnd() != null){
-						long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
+
+					if (time.getEnd() != null) {
+						long diffInMillies = time.getEnd().getTime()
+								- time.getStart().getTime();
 						TimeUnit tu = TimeUnit.MINUTES;
-						duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
-					}else{
+						duration = tu.convert(diffInMillies,
+								TimeUnit.MILLISECONDS);
+					} else {
 						duration = 0;
 					}
+
 					queryTask.setParameter(1, time.getTask_id());
 					Task t = (Task) queryTask.getSingleResult();
-					
+
 					queryProj.setParameter(1, t.getProject_id());
-					Project p = (Project)queryProj.getSingleResult();
-										
+					Project p = (Project) queryProj.getSingleResult();
+
 					writer.append(p.getName());
 					writer.append(',');
 					writer.append(t.getName());
@@ -100,24 +109,22 @@ public class DashboardServlet extends HttpServlet {
 					writer.append(',');
 					writer.append(TimeTracker.NVL(time.getEnd(), "").toString());
 					writer.append(',');
-					writer.append(duration/60 + "h "+ duration%60  + "min");
+					writer.append(duration / 60 + "h " + duration % 60 + "min");
 					writer.append('\n');
-					
-					
+
 				}
-				
+
 				writer.flush();
 				writer.close();
-				
+
 			}
-			
-		}
-		catch (Exception ex) {
-			 System.out.println(ex.getMessage());
+
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
 		} finally {
-	 		db.getEntityManager().getTransaction().commit();
-	 	}
-		
+			db.getEntityManager().getTransaction().commit();
+		}
+
 		super.doPost(req, resp);
 	}
 }

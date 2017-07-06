@@ -26,190 +26,199 @@ public class ProjectServlet extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
-		
+
 		DatabaseConnector db;
-		
+
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
 		} else {
-			db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
+			db = (DatabaseConnector) this.getServletContext().getAttribute(
+					TimeTracker.DBConnector);
 		}
-				
+
 		String nextJSP = "/jsp/project.jsp";
 		RequestDispatcher dispatcher = getServletContext()
 				.getRequestDispatcher(nextJSP);
 		dispatcher.forward(req, resp);
-		
+
 	}
-	
-	/* (non-Javadoc)
-	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+
 		String name = req.getParameter("name");
 		String desc = req.getParameter("desc");
 		String cat = req.getParameter("cat");
 		String action = req.getParameter("action");
 		String projectId = req.getParameter("projectId");
-		System.out.println(action);
+
 		DatabaseConnector db;
-		
-		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null){
+
+		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
-		}else {
-			db = (DatabaseConnector) this.getServletContext().getAttribute(TimeTracker.DBConnector);
+		} else {
+			db = (DatabaseConnector) this.getServletContext().getAttribute(
+					TimeTracker.DBConnector);
 		}
-		
-		if (action.equals("add")) {
-			db.getEntityManager().getTransaction().begin();	 
-			Query queryMaxId = db.getEntityManager().createNativeQuery("SELECT MAX(id)FROM project");
-			Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO project (id, name, description, category) VALUES (?, ?, ?, ?)");
-			
+
+		if (action.equals("add")) { // Add Project
+			db.getEntityManager().getTransaction().begin();
+			Query queryMaxId = db.getEntityManager().createNativeQuery(
+					"SELECT MAX(id)FROM project");
+			Query queryInsert = db
+					.getEntityManager()
+					.createNativeQuery(
+							"INSERT INTO project (id, name, description, category) VALUES (?, ?, ?, ?)");
+
 			try {
-				
-				Integer maxProjectId = (Integer)queryMaxId.getSingleResult();
-				if (maxProjectId == null) maxProjectId = 0;
-				Project prj = new Project(maxProjectId +1, name, desc, cat);
+
+				Integer maxProjectId = (Integer) queryMaxId.getSingleResult();
+				if (maxProjectId == null)
+					maxProjectId = 0;
+				Project prj = new Project(maxProjectId + 1, name, desc, cat);
 				projectId = "" + (maxProjectId + 1);
-				
+
 				db.getEntityManager().getTransaction().commit();
-				db.getEntityManager().getTransaction().begin();	
+				db.getEntityManager().getTransaction().begin();
 				queryInsert.setParameter(1, prj.getId());
 				queryInsert.setParameter(2, prj.getName());
 				queryInsert.setParameter(3, prj.getDescription());
 				queryInsert.setParameter(4, prj.getCategory());
 				queryInsert.executeUpdate();
 				db.getEntityManager().getTransaction().commit();
-				
+
 			} catch (Exception ex) {
 				db.getEntityManager().getTransaction().commit();
-			}				
-			
-						
+			}
+
 			this.getServletContext().setAttribute("PROJECTID", projectId);
-			resp.sendRedirect(req.getContextPath()+ "/project");
-		}
-		//Update Project
-		else if (action.equals("edit")) {
-			db.getEntityManager().getTransaction().begin();	
+			resp.sendRedirect(req.getContextPath() + "/project");
+		} else if (action.equals("edit")) { // Update Project
+			db.getEntityManager().getTransaction().begin();
 			projectId = req.getParameter("projectId");
-			Query queryUpdate = db.getEntityManager().createNativeQuery("UPDATE project SET name = ?, description = ?, category = ? WHERE id = ?");
+			Query queryUpdate = db
+					.getEntityManager()
+					.createNativeQuery(
+							"UPDATE project SET name = ?, description = ?, category = ? WHERE id = ?");
 			try {
-				//projectId = (String) query.getSingleResult();
-				// Insert new Project in DB
 				queryUpdate.setParameter(1, name);
 				queryUpdate.setParameter(2, desc);
 				queryUpdate.setParameter(3, cat);
 				queryUpdate.setParameter(4, projectId);
 				queryUpdate.executeUpdate();
 				db.getEntityManager().getTransaction().commit();
-				
+
 			} catch (Exception ex) {
 				db.getEntityManager().getTransaction().commit();
 			}
-			
+
 			this.getServletContext().setAttribute("PROJECTID", projectId);
-			resp.sendRedirect(req.getContextPath()+ "/project?projectId="+projectId);
-		} 
-		//Update Project
-		else if (action.equals("addUsers")) {
+			resp.sendRedirect(req.getContextPath() + "/project?projectId="
+					+ projectId);
+		} else if (action.equals("addUsers")) { // add Users to Project
 			projectId = req.getParameter("projectId");
 			String[] members = req.getParameterValues("projectmembers");
-			db.getEntityManager().getTransaction().begin();	
-			Query delete = db.getEntityManager().createNativeQuery("DELETE FROM projectmembers WHERE project_id = ?");
+			db.getEntityManager().getTransaction().begin();
+			Query delete = db.getEntityManager().createNativeQuery(
+					"DELETE FROM projectmembers WHERE project_id = ?");
 			delete.setParameter(1, projectId);
 			delete.executeUpdate();
 			db.getEntityManager().getTransaction().commit();
-			for (String s: members) {
-				db.getEntityManager().getTransaction().begin();	
-				Query update = db.getEntityManager().createNativeQuery("INSERT INTO projectmembers (username, project_id) VALUES(?,?)");
+			for (String s : members) {
+				db.getEntityManager().getTransaction().begin();
+				Query update = db
+						.getEntityManager()
+						.createNativeQuery(
+								"INSERT INTO projectmembers (username, project_id) VALUES(?,?)");
 				try {
-					//projectId = (String) query.getSingleResult();
-					// Insert new Project in DB
 					s = s.replaceAll("\\r\\n", "");
 					update.setParameter(1, s);
 					update.setParameter(2, projectId);
 					update.executeUpdate();
 					db.getEntityManager().getTransaction().commit();
-							
+
 				} catch (Exception ex) {
 					db.getEntityManager().getTransaction().commit();
 				}
-			}	
+			}
 			this.getServletContext().setAttribute("PROJECTID", projectId);
-			resp.sendRedirect(req.getContextPath()+ "/project?projectId="+projectId);
-		} 
-		else if (action.equals("delete")) {
-			db.getEntityManager().getTransaction().begin();	 
-			Query queryDelete = db.getEntityManager().createNativeQuery("DELETE FROM project WHERE id = ?");
-			Query queryDeleteTask = db.getEntityManager().createNativeQuery("DELETE FROM Task WHERE project_id = ?");
+			resp.sendRedirect(req.getContextPath() + "/project?projectId="
+					+ projectId);
+		} else if (action.equals("delete")) { // Delete Project
+			db.getEntityManager().getTransaction().begin();
+			Query queryDelete = db.getEntityManager().createNativeQuery(
+					"DELETE FROM project WHERE id = ?");
+			Query queryDeleteTask = db.getEntityManager().createNativeQuery(
+					"DELETE FROM Task WHERE project_id = ?");
 			projectId = req.getParameter("projectId");
 			try {
-				//projectId = (String) query.getSingleResult();
-				// Insert new Project in DB
 				queryDelete.setParameter(1, projectId);
 				queryDelete.executeUpdate();
 				queryDeleteTask.setParameter(1, projectId);
 				queryDeleteTask.executeUpdate();
 				db.getEntityManager().getTransaction().commit();
-				
+
 			} catch (Exception ex) {
 				db.getEntityManager().getTransaction().commit();
 			}
-	
+
 			this.getServletContext().setAttribute("PROJECTID", projectId);
-			resp.sendRedirect(req.getContextPath()+ "/project");
-		}
-		else if (action.equals("addTask")) {
-			String nextJSP = "/jsp/project.jsp?projectId=" + req.getParameter("projectId");
+			resp.sendRedirect(req.getContextPath() + "/project");
+		} else if (action.equals("addTask")) { // add Task to Project
+			String nextJSP = "/jsp/project.jsp?projectId="
+					+ req.getParameter("projectId");
 			db.getEntityManager().getTransaction().begin();
-			Query queryName = db.getEntityManager().createNativeQuery("SELECT id FROM Task WHERE name = ? AND project_id = ?");
+			Query queryName = db.getEntityManager().createNativeQuery(
+					"SELECT id FROM Task WHERE name = ? AND project_id = ?");
 			queryName.setParameter(1, req.getParameter("taskName"));
 			queryName.setParameter(2, req.getParameter("projectId"));
-			//Check if task with same name exists
-			if (queryName.getResultList().isEmpty() && req.getParameter("taskName") != "") {
-				//System.out.println("in if");
+			// Check if task with same name exists
+			if (queryName.getResultList().isEmpty()
+					&& req.getParameter("taskName") != "") {
 				db.getEntityManager().getTransaction().commit();
 				db.getEntityManager().getTransaction().begin();
-				Query queryMaxId = db.getEntityManager().createNativeQuery("SELECT MAX(id) FROM task");
-				Query queryInsert = db.getEntityManager().createNativeQuery("INSERT INTO task (id, name, description, project_id) VALUES (?, ?, ?, ?)");
+				Query queryMaxId = db.getEntityManager().createNativeQuery(
+						"SELECT MAX(id) FROM task");
+				Query queryInsert = db
+						.getEntityManager()
+						.createNativeQuery(
+								"INSERT INTO task (id, name, description, project_id) VALUES (?, ?, ?, ?)");
 				String taskName = req.getParameter("taskName");
 				String taskDesc = req.getParameter("taskDesc");
 				projectId = req.getParameter("projectId");
-				
+
 				try {
-					Integer maxTaskId = (Integer)queryMaxId.getSingleResult();
-					if (maxTaskId == null) maxTaskId = 0;
-					Task task = new Task(maxTaskId +1, 0, taskName, taskDesc);
-									
+					Integer maxTaskId = (Integer) queryMaxId.getSingleResult();
+					if (maxTaskId == null)
+						maxTaskId = 0;
+					Task task = new Task(maxTaskId + 1, 0, taskName, taskDesc);
+
 					db.getEntityManager().getTransaction().commit();
-					db.getEntityManager().getTransaction().begin();	
-	
+					db.getEntityManager().getTransaction().begin();
+
 					queryInsert.setParameter(1, task.getId());
 					queryInsert.setParameter(2, task.getName());
 					queryInsert.setParameter(3, task.getDescription());
 					queryInsert.setParameter(4, projectId);
 					queryInsert.executeUpdate();
 					db.getEntityManager().getTransaction().commit();
-					
+
 				} catch (Exception ex) {
 					db.getEntityManager().getTransaction().commit();
 				}
-			}
-			else if (!queryName.getResultList().isEmpty()) {
+			} else if (!queryName.getResultList().isEmpty()) {
 				db.getEntityManager().getTransaction().commit();
-				req.setAttribute("errorMessage", "Task already exists! Unique names are required!");
+				req.setAttribute("errorMessage",
+						"Task already exists! Unique names are required!");
 				RequestDispatcher dispatcher = getServletContext()
 						.getRequestDispatcher(nextJSP);
 				dispatcher.forward(req, resp);
 				return;
 			}
-			
+
 			else {
 				db.getEntityManager().getTransaction().commit();
 				req.setAttribute("errorMessage", "Task name required!");
@@ -218,11 +227,12 @@ public class ProjectServlet extends HttpServlet {
 				dispatcher.forward(req, resp);
 				return;
 			}
-			
+
 			req.setAttribute("projectId", projectId);
-			resp.sendRedirect(req.getContextPath()+ "/project?projectId="+projectId);
-		
+			resp.sendRedirect(req.getContextPath() + "/project?projectId="
+					+ projectId);
+
 		}
-		
+
 	}
 }

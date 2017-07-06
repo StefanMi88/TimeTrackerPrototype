@@ -6,20 +6,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="PROJECT")
+@Table(name = "PROJECT")
 public class Projectmembers {
 
 	@Id
 	@Column(name = "ID")
 	private int id;
-	
+
 	@Column(name = "USERNAME")
 	private String username;
-	
+
 	@Column(name = "PROJECT_ID")
 	private int project_id;
 
-	
 	public Projectmembers() {
 		super();
 	}
@@ -53,5 +52,5 @@ public class Projectmembers {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 }

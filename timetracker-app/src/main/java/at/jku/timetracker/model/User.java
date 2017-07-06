@@ -12,7 +12,7 @@ public class User {
 	@Id
 	@Column(name = "ID")
 	private int id;
-	
+
 	@Column(name = "USERNAME")
 	private String username;
 
@@ -21,125 +21,109 @@ public class User {
 
 	@Column(name = "TYPE")
 	private String type;
-	
+
 	@Column(name = "CITY")
 	private String city;
-	
+
 	@Column(name = "FIRSTNAME")
 	private String firstName;
-	
+
 	@Column(name = "LASTNAME")
 	private String lastName;
 
 	@Column(name = "ADDRESS")
 	private String address;
-	
+
 	@Column(name = "ZIP")
 	private String zip;
-	
+
 	@Column(name = "ABOUTME")
 	private String aboutMe;
-	
+
 	@Column(name = "COMPANY")
 	private String company;
-	
+
 	@Column(name = "EMAIL")
 	private String email;
-	
+
 	@Column(name = "COUNTRY")
 	private String country;
-	
+
 	public User() {
 		super();
 	}
 
 	public int getId() {
 		return id;
-	}	
-	
+	}
+
 	public void setId(int id) {
 		this.id = id;
-	}	
-	
+	}
+
 	public String getCity() {
 		return city;
 	}
-
 
 	public void setCity(String city) {
 		this.city = city;
 	}
 
-
 	public String getFirstName() {
 		return firstName;
 	}
-
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-
 	public String getLastName() {
 		return lastName;
 	}
-
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-
 	public String getAddress() {
 		return address;
 	}
-
 
 	public void setAddress(String address) {
 		this.address = address;
 	}
 
-
 	public String getZip() {
 		return zip;
 	}
-
 
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
 
-
 	public String getAboutMe() {
 		return aboutMe;
 	}
-
 
 	public void setAboutMe(String aboutMe) {
 		this.aboutMe = aboutMe;
 	}
 
-
 	public String getCompany() {
 		return company;
 	}
-
 
 	public void setCompany(String company) {
 		this.company = company;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
 
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	public User(String username, String password, String type) {
 		this.username = username;
@@ -196,7 +180,5 @@ public class User {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
-	
 
 }

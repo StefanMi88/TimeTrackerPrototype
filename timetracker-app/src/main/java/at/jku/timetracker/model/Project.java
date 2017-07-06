@@ -6,23 +6,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="PROJECT")
+@Table(name = "PROJECT")
 public class Project {
 
 	@Id
 	@Column(name = "ID")
 	private int id;
-	
+
 	@Column(name = "NAME")
 	private String name;
-	
+
 	@Column(name = "DESCRIPTION")
 	private String description;
-	
+
 	@Column(name = "CATEGORY")
 	private String category;
 
-	
 	public Project() {
 		super();
 	}
@@ -49,7 +48,7 @@ public class Project {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getCategory() {
 		return category;
 	}
@@ -65,5 +64,5 @@ public class Project {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 }
