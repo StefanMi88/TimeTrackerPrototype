@@ -425,6 +425,7 @@
 		
 		if (!values.isEmpty()) {
 
+		if (!values.isEmpty()) {
 			long duration;
 			for (Time time : values) {
 				if(time.getEnd() != null){
@@ -434,11 +435,19 @@
 				}else{
 					duration = 0;
 				}
-				queryTask.setParameter(1, time.getTask_id());
-				Task t = (Task) queryTask.getSingleResult();
 				
-				queryProj.setParameter(1, t.getProject_id());
-				Project p = (Project)queryProj.getSingleResult();
+				queryTask.setParameter(1, time.getTask_id());
+				List<Task> tasks =  queryTask.getResultList();
+				Task t;
+				String pName = "deleted", tName = "deleted";
+				if (!tasks.isEmpty()) {
+					t = tasks.get(0);
+					queryProj.setParameter(1, t.getProject_id());
+					Project p = (Project)queryProj.getSingleResult();
+					pName = p.getName();
+					tName = t.getName();
+				}
+				
 				out.println("<tr>");
 				out.println("<td>" + p.getName()+ "</td>");
 	            out.println("<td>" + t.getName() + "</td>");
