@@ -146,22 +146,29 @@
 														queryTime.setParameter(1, u.getId());
 														List<Time> values = queryTime.getResultList();
 														
-														if (!values.isEmpty()) {
-													
-													long duration;
-													for (Time time : values) {
-														if(time.getEnd() != null){
-															long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
-															TimeUnit tu = TimeUnit.MINUTES;
-															duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
-														}else{
-															duration = 0;
-														}
-														queryTask.setParameter(1, time.getTask_id());
-														Task t = (Task) queryTask.getSingleResult();
-														
-														queryProj.setParameter(1, t.getProject_id());
-														Project p = (Project)queryProj.getSingleResult();
+
+															if (!values.isEmpty()) {
+															long duration;
+															for (Time time : values) {
+																if(time.getEnd() != null){
+																	long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
+																	TimeUnit tu = TimeUnit.MINUTES;
+																	duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
+																}else{
+																	duration = 0;
+																}
+
+																queryTask.setParameter(1, time.getTask_id());
+																List<Task> tasks =  queryTask.getResultList();
+																Task t;
+																String pName = "deleted", tName = "deleted";
+																if (!tasks.isEmpty()) {
+																	t = tasks.get(0);
+																	queryProj.setParameter(1, t.getProject_id());
+																	Project p = (Project)queryProj.getSingleResult();
+																	pName = p.getName();
+																	tName = t.getName();
+																}
 														out.println("<tr>");
 														out.println("<td>" + p.getName()+ "</td>");
 													    out.println("<td>" + t.getName() + "</td>");
