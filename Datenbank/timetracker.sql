@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 28. Jun 2017 um 21:21
+-- Erstellungszeit: 10. Jul 2017 um 19:14
 -- Server-Version: 10.1.21-MariaDB
 -- PHP-Version: 5.6.30
 
@@ -58,7 +58,8 @@ CREATE TABLE `project` (
 --
 
 INSERT INTO `project` (`id`, `name`, `description`, `category`) VALUES
-(1, 'TimeTracker Prototype', 'Create a time tracker prototype as Java webapp', 'Development');
+(1, 'test', 'TEST', 'Development'),
+(2, 'aetat', '', 'Development');
 
 -- --------------------------------------------------------
 
@@ -78,14 +79,12 @@ CREATE TABLE `projectmembers` (
 --
 
 INSERT INTO `projectmembers` (`id`, `username`, `project_id`, `admin`) VALUES
-(34, 'max1', 3, 0),
-(35, 'admin', 3, 0),
-(36, 'max', 3, 0),
-(37, 'admin2', 3, 0),
-(38, 'oliver', 3, 0),
 (40, 'admin', 2, 0),
 (41, 'admin2', 2, 0),
-(42, 'admin', 1, 0);
+(43, 'admin', 1, 0),
+(44, 'JuliaP', 1, 0),
+(45, 'admin', 3, 0),
+(46, 'JuliaP', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -105,8 +104,9 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `name`, `description`, `project_id`) VALUES
-(1, ' Frontend', 'Develop Frontend', 1),
-(2, 'Backend', 'Develop Backend', 1);
+(1, 'test', 'test', 1),
+(2, '2', '1', 1),
+(3, '3', '4', 1);
 
 -- --------------------------------------------------------
 
@@ -127,8 +127,13 @@ CREATE TABLE `time` (
 --
 
 INSERT INTO `time` (`id`, `task_id`, `user_id`, `start`, `end`) VALUES
-(1, 1, 2, '2017-06-28 18:41:03', '2017-06-28 18:46:35'),
-(2, 2, 2, '2017-06-27 15:00:00', '2017-06-27 19:00:00');
+(9, 1, 2, '2017-07-08 14:50:21', '2017-07-08 14:50:24'),
+(10, 1, 2, '2017-07-08 15:14:40', '2017-07-08 15:14:41'),
+(11, 1, 2, '2017-07-08 15:15:34', '2017-07-08 15:15:43'),
+(12, 1, 2, '2017-07-08 15:15:51', '2017-07-08 15:16:24'),
+(13, 1, 2, '2017-07-08 15:17:54', '2017-07-08 15:18:13'),
+(14, 1, 2, '2017-07-08 15:18:16', '2017-07-08 15:19:33'),
+(15, 1, 2, '2017-07-08 15:19:37', '2017-07-08 15:19:44');
 
 -- --------------------------------------------------------
 
@@ -208,12 +213,17 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT für Tabelle `projectmembers`
 --
 ALTER TABLE `projectmembers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+--
+-- AUTO_INCREMENT für Tabelle `task`
+--
+ALTER TABLE `task`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT für Tabelle `time`
 --
 ALTER TABLE `time`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT für Tabelle `user`
 --
