@@ -117,7 +117,7 @@
 				<div class="container-fluid">
 					<div class="row">
 
-						<div class="col-md-6">
+						<div class="col-md-12">
 							<div class="card ">
 								<div class="header">
 									<h4 class="title">Tasks</h4>
@@ -139,7 +139,7 @@
 												<%
 													try {
 														db.getEntityManager().getTransaction().begin();	 
-														Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1", Time.class);
+														Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
 														Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
 														Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
 														User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
