@@ -407,6 +407,15 @@
 													class="btn btn-warning btn-fill btn-sm" name="submit">Create</button>
 											</div>
 										</div>
+										<div class="control-group error">
+											<span class="help-inline">
+												<%
+													if (request.getAttribute("errorMessage") != null) {
+																out.println(request.getAttribute("errorMessage"));
+															}
+												%>
+											</span>
+										</div>
 									</form>
 									<br />
 								</div>
