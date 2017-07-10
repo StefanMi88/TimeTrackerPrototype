@@ -122,7 +122,7 @@
 									Query project = db
 											.getEntityManager()
 											.createNativeQuery(
-													"SELECT name, description FROM project WHERE id = ?",
+													"SELECT name, description, category FROM project WHERE id = ?",
 													Project.class);
 									project.setParameter(1, proId);
 									Project prj = (Project) project.getSingleResult();
@@ -141,9 +141,9 @@
 											<div class="col-md-3">
 												<label for="name">Name:</label> <input class="" type="text"
 													name="name" id="name"
-													value="<%out.println(prj.getName());%>" />
+													value="<%out.println(prj.getName());%>" size="30" />
 											</div>
-											<div class="col-md-7">
+											<div class="col-md-5">
 												<label for="desc">Description:</label> <input type="hidden"
 													name="projectId" id="projectId"
 													value="<%out.println(request.getParameter("projectId"));%>" />
@@ -151,9 +151,36 @@
 													value="<%out.println(prj.getDescription());%>" />
 											</div>
 											<div class="col-md-2">
+												<label for="desc">Category:</label> <select name="cat">
+													<%
+														if (prj.getCategory().equals("Development")) {
+																	out.println("<option value=\"Development\" selected>Development</option>");
+																} else {
+																	out.println("<option value=\"Development\">Development</option>");
+																}
+																if (prj.getCategory().equals("Marketing")) {
+																	out.println("<option value=\"Marketing\" selected>Marketing</option>");
+																} else {
+																	out.println("<option value=\"Marketing\">Marketing</option>");
+																}
+																if (prj.getCategory().equals("Sales")) {
+																	out.println("<option value=\"Sales\" selected>Sales</option>");
+																} else {
+																	out.println("<option value=\"Sales\">Sales</option>");
+																}
+																if (prj.getCategory().equals("Organization")) {
+																	out.println("<option value=\"Organization\" selected>Organization</option>");
+																} else {
+																	out.println("<option value=\"Organization\">Organization</option>");
+																}
+													%>
+												</select>
+											</div>
+											<div class="col-md-2">
 												<label for="submit">&nbsp;</label>
 												<button type="submit"
-													class="btn btn-warning btn-fill btn-sm" name="submit">Update</button>
+													class="btn btn-warning btn-fill btn-sm" name="submit">
+													Update</button>
 											</div>
 										</div>
 									</form>
@@ -173,72 +200,87 @@
 							<div class="card">
 								<div class="header">
 									<h4 class="title">Add Users to project...</h4>
-									<p class="category">Select users who should be able to access the project and tasks<br />Note: press STRG or CMD to select multiple users!</p>
+									<p class="category">
+										Select users who should be able to access the project and
+										tasks<br />Note: press STRG or CMD to select multiple users!
+									</p>
 								</div>
 								<div class="content">
 									<form method="post" action="project?action=addUsers">
 										<div class="row">
 											<div class="col-md-12">
-											<% try {
-												db.getEntityManager().getTransaction().begin();	 
-												Query members = db.getEntityManager().createNativeQuery("SELECT username FROM projectmembers WHERE project_id = ?", Projectmembers.class);
-												members.setParameter(1, request.getParameter("projectId"));
-												List<Projectmembers> member = members.getResultList();
-												Query users = db.getEntityManager().createNativeQuery("SELECT username FROM user", User.class);
-												List<User> user = users.getResultList();	
-												if (!user.isEmpty()) {
-													//out.println(member.size());
-													//out.println(user.size());
-													//Display values
-													%>
-													<select multiple id="projectmembers" name="projectmembers" size="<% out.println(user.size()); %>">
-													<% 
-													for (User u: user) {
-														String curUser = u.getUsername();
-														%><option value="<% out.println(curUser); %>" 
-														<% 
-															for(Projectmembers m: member) {
-																String curMember = m.getUsername();
-																if (curUser.startsWith(curMember)) {
-																	out.println(" selected");
-																}
+												<%
+													try {
+																db.getEntityManager().getTransaction().begin();
+																Query members = db
+																		.getEntityManager()
+																		.createNativeQuery(
+																				"SELECT username FROM projectmembers WHERE project_id = ?",
+																				Projectmembers.class);
+																members.setParameter(1,
+																		request.getParameter("projectId"));
+																List<Projectmembers> member = members.getResultList();
+																Query users = db.getEntityManager().createNativeQuery(
+																		"SELECT username FROM user", User.class);
+																List<User> user = users.getResultList();
+																if (!user.isEmpty()) {
+																	
+												%>
+												<select multiple id="projectmembers" name="projectmembers"
+													size="<%out.println(user.size());%>">
+													<%
+														for (User u : user) {
+																			String curUser = u.getUsername();
+													%><option value="<%out.println(curUser);%>"
+														<%for (Projectmembers m : member) {
+															String curMember = m.getUsername();
+															if (curUser.startsWith(curMember)) {
+																out.println(" selected");
 															}
+														}%>>
+														<%
+															out.println(curUser);
 														%>
-														>
-														<% out.println(curUser); %></option><%
-													}
-												}
-												else {
-													out.println("");
-												}
-												
-											}
-											catch (Exception ex) {
-												 out.println(ex.getMessage());
-											} finally {
-										 		db.getEntityManager().getTransaction().commit();
-										 	} %>
-				
-											</select>
+													</option>
+													<%
+														}
+																	} else {
+																		out.println("");
+																	}
+
+																} catch (Exception ex) {
+																	out.println(ex.getMessage());
+																} finally {
+																	db.getEntityManager().getTransaction().commit();
+																}
+													%>
+
+												</select>
 											</div>
-											<input type="hidden"
-													name="projectId" id="projectId"
-													value="<%out.println(request.getParameter("projectId"));%>" />
+											<input type="hidden" name="projectId" id="projectId"
+												value="<%out.println(request.getParameter("projectId"));%>" />
 											<div class="col-md-2">
 												<label for="submit">&nbsp;</label>
 												<button type="submit"
-													class="btn btn-warning btn-fill btn-sm" name="submit">Update users</button>
+													class="btn btn-warning btn-fill btn-sm" name="submit">Update
+													users</button>
 											</div>
 											<div class="control-group error">
-		      										<span class="help-inline"><% if(request.getAttribute("errorMessage")!=null) {out.println(request.getAttribute("errorMessage"));}%></span>
-		    								</div>
+												<span class="help-inline">
+													<%
+														if (request.getAttribute("errorMessage") != null) {
+																	out.println(request.getAttribute("errorMessage"));
+																}
+													%>
+												</span>
+											</div>
 										</div>
 									</form>
 									<br />
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="col-md-12">
 							<div class="card">
 								<div class="header">
@@ -248,42 +290,45 @@
 								<div class="content">
 									<form method="post" action="project?action=addTask">
 										<div class="row">
-										
+
 											<div class="col-md-4">
-												<label for="name">Name:</label> 
-												<input class="" type="text"
-													name="taskName" id="taskName"
-													value="" />
+												<label for="name">Name:</label> <input class="" type="text"
+													name="taskName" id="taskName" value="" />
 											</div>
 											<div class="col-md-6">
-												<label for="name">Description:</label> 
-												<input type="text" name="taskDesc" id="taskDesc"
-													value="" />
+												<label for="name">Description:</label> <input type="text"
+													name="taskDesc" id="taskDesc" value="" />
 											</div>
-											<input type="hidden"
-													name="projectId" id="projectId"
-													value="<%out.println(request.getParameter("projectId"));%>" />
+											<input type="hidden" name="projectId" id="projectId"
+												value="<%out.println(request.getParameter("projectId"));%>" />
 											<div class="col-md-2">
 												<label for="submit">&nbsp;</label>
 												<button type="submit"
-													class="btn btn-warning btn-fill btn-sm" name="submit">Add Task</button>
+													class="btn btn-warning btn-fill btn-sm" name="submit">Add
+													Task</button>
 											</div>
 											<div class="control-group error">
-		      										<span class="help-inline"><% if(request.getAttribute("errorMessage")!=null) {out.println(request.getAttribute("errorMessage"));}%></span>
-		    								</div>
+												<span class="help-inline">
+													<%
+														if (request.getAttribute("errorMessage") != null) {
+																	out.println(request.getAttribute("errorMessage"));
+																}
+													%>
+												</span>
+											</div>
 										</div>
 									</form>
 									<br />
 								</div>
 							</div>
 						</div>
-						
-						
+
+
 						<div class="col-md-12">
 							<div class="card">
 								<div class="header">
 									<h4 class="title">Existing Tasks</h4>
-									
+
 								</div>
 								<div class="content table-responsive table-full-width">
 									<table class="table table-hover table-striped">
@@ -295,21 +340,20 @@
 											<%
 												try {
 															db.getEntityManager().getTransaction().begin();
-															Query query = db.getEntityManager().createNativeQuery(
-																	"Select * from Task where PROJECT_ID = ?1", Task.class);
-															query.setParameter(1, proId);
-															List<Task> values = query.getResultList();
+															Query queryTask = db.getEntityManager().createNativeQuery(
+																	"Select * from Task where PROJECT_ID = ?1",
+																	Task.class);
+															queryTask.setParameter(1, proId);
+															List<Task> values = queryTask.getResultList();
 
 															if (values != null) {
-																//out.println(values.size());
-																//Display values
+																
 																for (Task task : values) {
 																	out.println("<tr>");
-																    out.println("<td>" + task.getName() + "</td>");
-																    //out.println("<td>" + task.getCategory_id()+ "</td>");
-																    out.println("<td>" + task.getDescription() + "</td>");	            
-																    // ADD USER to Task out.println("<td><a href=\"project?projectId="+ prj.getId() +"\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
-																    out.println("</tr>");
+																	out.println("<td>" + task.getName() + "</td>");
+																	out.println("<td>" + task.getDescription()
+																			+ "</td>");
+																	out.println("</tr>");
 																}
 															}
 
@@ -341,19 +385,36 @@
 								<div class="content">
 									<form method="post" action="project?action=add">
 										<div class="row">
-											<div class="col-md-3">
+											<div class="col-md-2">
 												<label for="name">Name:</label> <input class="" type="text"
-													name="name" id="name">
+													name="name" id="name" size="20">
 											</div>
-											<div class="col-md-7">
+											<div class="col-md-5">
 												<label for="desc">Description:</label> <input type="text"
 													name="desc" id="desc" size="60">
 											</div>
 											<div class="col-md-2">
-												<label for="submit">&nbsp;</label>
+												<label for="cat">Category:</label> <select name="cat">
+													<option value="Development">Development</option>
+													<option value="Marketing">Marketing</option>
+													<option value="Sales">Sales</option>
+													<option value="Organization">Organization</option>
+												</select>
+											</div>
+											<div class="col-md-3">
+												<label for="submit">&nbsp;<br /></label>
 												<button type="submit"
 													class="btn btn-warning btn-fill btn-sm" name="submit">Create</button>
 											</div>
+										</div>
+										<div class="control-group error">
+											<span class="help-inline">
+												<%
+													if (request.getAttribute("errorMessage") != null) {
+																out.println(request.getAttribute("errorMessage"));
+															}
+												%>
+											</span>
 										</div>
 									</form>
 									<br />
@@ -373,24 +434,25 @@
 											<th>ID</th>
 											<th>Name</th>
 											<th>Description</th>
-											<th>Add</th>
+											<th>Category</th>
+											<th>Edit/Add Task & Users</th>
 										</thead>
 										<tbody>
 											<%
 												try {
 														db.getEntityManager().getTransaction().begin();
-														Query query = db.getEntityManager().createNativeQuery(
+														Query queryProject = db.getEntityManager().createNativeQuery(
 																"Select * from project", Project.class);
-														List<Project> values = query.getResultList();
+														List<Project> values = queryProject.getResultList();
 
 														if (values != null) {
-															//out.println(values.size());
-															//Display values
+															
 															for (Project prj : values) {
 																out.println("<tr>");
 																out.println("<td>" + prj.getId() + "</td>");
 																out.println("<td>" + prj.getName() + "</td>");
 																out.println("<td>" + prj.getDescription() + "</td>");
+																out.println("<td>" + prj.getCategory() + "</td>");
 																out.println("<td><a href=\"project?projectId="
 																		+ prj.getId()
 																		+ "\" title=\"Add\"><span class=\"pe-7s-edit\"></span></a></td>");
