@@ -422,8 +422,6 @@
 		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
 		queryTime.setParameter(1, u.getId());
 		List<Time> values = queryTime.getResultList();
-		
-		if (!values.isEmpty()) {
 
 		if (!values.isEmpty()) {
 			long duration;
@@ -449,8 +447,8 @@
 				}
 				
 				out.println("<tr>");
-				out.println("<td>" + p.getName()+ "</td>");
-	            out.println("<td>" + t.getName() + "</td>");
+				out.println("<td>" + pName + "</td>");
+	            out.println("<td>" + tName + "</td>");
 	            out.println("<td>" + time.getStart() + "</td>");
 	            if (time.getEnd() == null) {
 	            	out.println("<td>in progress</td>");	
@@ -470,8 +468,7 @@
 	            out.println("</tr>");
 			}
 		}
-		
-	}
+	}	
 	catch (Exception ex) {
 		 out.println(ex.getMessage());
 	} finally {

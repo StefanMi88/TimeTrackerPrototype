@@ -170,8 +170,8 @@
 																	tName = t.getName();
 																}
 														out.println("<tr>");
-														out.println("<td>" + p.getName()+ "</td>");
-													    out.println("<td>" + t.getName() + "</td>");
+														out.println("<td>" + pName + "</td>");
+													    out.println("<td>" + tName + "</td>");
 													    out.println("<td>" + time.getStart() + "</td>");
 													    out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
 													    out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
