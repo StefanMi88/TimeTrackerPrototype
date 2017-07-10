@@ -185,7 +185,7 @@ public class ProjectServlet extends HttpServlet {
 				Query queryInsert = db
 						.getEntityManager()
 						.createNativeQuery(
-								"INSERT INTO task (id, name, description, project_id) VALUES (?, ?, ?, ?)");
+								"INSERT INTO task (id, name, description, project_id) VALUES (?1, ?2, ?3, ?4)");
 				String taskName = req.getParameter("taskName");
 				String taskDesc = req.getParameter("taskDesc");
 				projectId = req.getParameter("projectId");
@@ -194,7 +194,7 @@ public class ProjectServlet extends HttpServlet {
 					Integer maxTaskId = (Integer) queryMaxId.getSingleResult();
 					if (maxTaskId == null)
 						maxTaskId = 0;
-					Task task = new Task(maxTaskId + 1, 0, taskName, taskDesc);
+					Task task = new Task(maxTaskId + 1, 0, taskDesc, taskName);
 
 					db.getEntityManager().getTransaction().commit();
 					db.getEntityManager().getTransaction().begin();
