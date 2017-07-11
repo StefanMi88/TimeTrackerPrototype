@@ -44,8 +44,8 @@
 </head>
 <body>
 	<%
+		// Get DB Connection
 		DatabaseConnector db;
-
 		if (request.getServletContext().getAttribute(
 				TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
@@ -126,7 +126,7 @@
 									<p class="category">
 										<%
 											try {
-												 
+												 // Display Projects User is assigned to
 												db.getEntityManager().getTransaction().begin();
 												Query queryProj = db
 														.getEntityManager()

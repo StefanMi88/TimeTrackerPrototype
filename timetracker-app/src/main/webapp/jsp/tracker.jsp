@@ -53,8 +53,8 @@
 </head>
 <body>
 <%
+	//Get DB Connection
 	DatabaseConnector db;
-	
 	if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 		db = new DatabaseConnector();
 		request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
@@ -147,6 +147,9 @@
                                             <form method="post" action="startTime?type=edit"> 
                                                         <%
 															try {
+																
+																// Edit Time
+																
 																String timeId = request.getParameter("editTimeId");
 																db.getEntityManager().getTransaction().begin();	 
 																Query queryTime = db.getEntityManager().createNativeQuery("SELECT * FROM time WHERE id = ?", Time.class);

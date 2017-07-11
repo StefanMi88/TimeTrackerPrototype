@@ -22,13 +22,14 @@ public class ProjectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		// Check if User is logged in
 		if (this.getServletContext().getAttribute(TimeTracker.User) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 
+		// Get DB Connection
 		DatabaseConnector db;
-
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
@@ -54,8 +55,8 @@ public class ProjectServlet extends HttpServlet {
 		String action = req.getParameter("action");
 		String projectId = req.getParameter("projectId");
 
+		// Get DB Connection
 		DatabaseConnector db;
-
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
@@ -104,8 +105,8 @@ public class ProjectServlet extends HttpServlet {
 					this.getServletContext().setAttribute("PROJECTID", projectId);
 					resp.sendRedirect(req.getContextPath() + "/project");
 				}
-				//Project already exists
-				else if (!checkDouble.getResultList().isEmpty()) {
+				
+				else if (!checkDouble.getResultList().isEmpty()) { //Project already exists
 					db.getEntityManager().getTransaction().begin();
 					db.getEntityManager().getTransaction().commit();
 					req.setAttribute("errorMessage",
@@ -116,8 +117,8 @@ public class ProjectServlet extends HttpServlet {
 					return;
 				}
 			}
-			//Values empty!
-			else {
+			
+			else { //Values empty!
 				db.getEntityManager().getTransaction().begin();
 				db.getEntityManager().getTransaction().commit();
 				req.setAttribute("errorMessage",
@@ -241,7 +242,7 @@ public class ProjectServlet extends HttpServlet {
 				} catch (Exception ex) {
 					db.getEntityManager().getTransaction().commit();
 				}
-			} else if (!queryName.getResultList().isEmpty()) {
+			} else if (!queryName.getResultList().isEmpty()) { // Task not unique
 				db.getEntityManager().getTransaction().commit();
 				req.setAttribute("errorMessage",
 						"Task already exists! Unique names are required!");
@@ -251,7 +252,7 @@ public class ProjectServlet extends HttpServlet {
 				return;
 			}
 
-			else {
+			else { // Task Name is  Null
 				db.getEntityManager().getTransaction().commit();
 				req.setAttribute("errorMessage", "Task name required!");
 				RequestDispatcher dispatcher = getServletContext()

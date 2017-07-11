@@ -50,8 +50,8 @@
 <body>
 
 	<%
+		// Get DB Connection
 		DatabaseConnector db;
-
 		if (request.getServletContext().getAttribute(
 				TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();

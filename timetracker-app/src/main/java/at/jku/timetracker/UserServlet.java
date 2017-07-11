@@ -24,11 +24,14 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		// Check if User is logged in
 		if ((user = (User) this.getServletContext().getAttribute(
 				TimeTracker.User)) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
+		
+		// Get DB Connection
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);

@@ -39,6 +39,7 @@ public class LoginServlet extends HttpServlet {
 		String password = req.getParameter("password");
 		DatabaseConnector db;
 
+		// Get DB Connection
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
@@ -67,10 +68,10 @@ public class LoginServlet extends HttpServlet {
 
 		db.getEntityManager().getTransaction().commit();
 
-		if (u.getPassword().equals(password)) {
+		if (u.getPassword().equals(password)) { // Login allowed
 			this.getServletContext().setAttribute(TimeTracker.User, u);
 			resp.sendRedirect(req.getContextPath() + "/tracker");
-		} else {
+		} else { // Login not allowed
 			req.setAttribute("errorMessage", "Falsches Passwort!");
 			String nextJSP = "/jsp/login.jsp";
 			RequestDispatcher dispatcher = getServletContext()

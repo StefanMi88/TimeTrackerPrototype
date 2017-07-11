@@ -33,11 +33,13 @@ public class DashboardServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		// Check if User is logged in
 		if (this.getServletContext().getAttribute(TimeTracker.User) == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 
+		// Get DB Connection
 		if (this.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			this.getServletContext().setAttribute(TimeTracker.DBConnector, db);
@@ -57,6 +59,7 @@ public class DashboardServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		// Create CSV File
 		String filename = "download.csv";
 		resp.setHeader("Content-Type", "text/csv");
 		resp.setHeader("Content-Disposition", "attachment; filename=\""
@@ -83,6 +86,7 @@ public class DashboardServlet extends HttpServlet {
 
 				long duration;
 
+				// write Line into CSV File
 				for (Time time : values) {
 
 					if (time.getEnd() != null) {

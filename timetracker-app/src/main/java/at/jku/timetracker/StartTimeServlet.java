@@ -28,6 +28,7 @@ public class StartTimeServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
+		// Get DB Connection
 		DatabaseConnector db;
 		String action = req.getParameter("type");
 		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);

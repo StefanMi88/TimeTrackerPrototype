@@ -49,8 +49,9 @@
 </head>
 <body>
 	<%
+	
+		// Get DB Connection
 		DatabaseConnector db;
-		
 		if (request.getServletContext().getAttribute(TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
 			request.getServletContext().setAttribute(TimeTracker.DBConnector, db);
@@ -137,6 +138,7 @@
 
 
 												<%
+													// Dsiplay Timesof User
 													try {
 														db.getEntityManager().getTransaction().begin();	 
 														Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);

@@ -47,8 +47,9 @@
 </head>
 <body>
 	<%
+		
+		// Get DB Connection
 		DatabaseConnector db;
-
 		if (request.getServletContext().getAttribute(
 				TimeTracker.DBConnector) == null) {
 			db = new DatabaseConnector();
@@ -211,6 +212,7 @@
 											<div class="col-md-12">
 												<%
 													try {
+																// Show User who are assigned to a Project
 																db.getEntityManager().getTransaction().begin();
 																Query members = db
 																		.getEntityManager()
@@ -440,6 +442,7 @@
 										<tbody>
 											<%
 												try {
+														// Display Projects
 														db.getEntityManager().getTransaction().begin();
 														Query queryProject = db.getEntityManager().createNativeQuery(
 																"Select * from project", Project.class);
