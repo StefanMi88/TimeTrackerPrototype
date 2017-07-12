@@ -89,15 +89,15 @@
 					</div>
 					<div class="collapse navbar-collapse">
 						<ul class="nav navbar-nav navbar-right">
+							<!-- show new user menu item if user leven = admin -->
 							<li><a href="newuser"
-								class="<%User u = (User) this.getServletContext().getAttribute(
-					TimeTracker.User);
-			if (u.getType().toLowerCase().equals("admin")) {
-				out.println("");
-			} else {
-				out.println("hidden");
-			}%>">
-									New User </a></li>
+								class="<%User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+								if (u.getType().toLowerCase().equals("admin")) {
+									out.println("");
+								} else {
+									out.println("hidden");
+								}
+								%>">New User </a></li>
 							<li><a href="user"> Account </a></li>
 							<li><a href="login"> Log out </a></li>
 						</ul>

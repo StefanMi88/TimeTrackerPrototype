@@ -104,6 +104,7 @@
 													name="submit">Login</button>
 											</div>
 										</div>
+										<!-- handle error if occured -->
 										<div class="control-group error">
 											<span class="help-inline"><%=request.getAttribute("errorMessage")%></span>
 										</div>

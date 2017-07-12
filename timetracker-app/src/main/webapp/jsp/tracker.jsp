@@ -43,6 +43,7 @@
     <link href="css/pe-icon-7-stroke.css" rel="stylesheet" /> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script>
+	//jQuery function to show hide the manual adding div
 	$(document).ready(function(){
 		$("#manual").hide();
 		$("#btn_manual").click(function(){
@@ -125,6 +126,7 @@
                 </div>
             </div>
         </nav>
+        <!-- show edit view if editTimeId exists as URL parameter -->
         <div class="content"><%
         	if (request.getParameter("editTimeId") != null) {
         		%>
@@ -149,7 +151,6 @@
 															try {
 																
 																// Edit Time
-																
 																String timeId = request.getParameter("editTimeId");
 																db.getEntityManager().getTransaction().begin();	 
 																Query queryTime = db.getEntityManager().createNativeQuery("SELECT * FROM time WHERE id = ?", Time.class);
@@ -191,6 +192,7 @@
         	}
         	else {
         	%>
+        	<!-- track time automatically -->
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -251,6 +253,7 @@
 																	List<Task> values = queryTask.getResultList();
 
 																	String btn;
+																	//List available tasks to track
 																	if (values != null)
 																	{
 																		for (Task task : values) {
@@ -283,6 +286,7 @@
 														%>
                                         </tr>
                                         <script>
+                                        	//get current timestamp for tracker
                                             var currentdate = new Date();
                                             var time = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
                                             document.getElementById("curtime").innerHTML = time;
@@ -297,6 +301,7 @@
                     </div>
                 </div>
             </div>
+            <!-- manual time tracking div - toggled by jQuery function -->
              <div class="container-fluid" id="manual">
                 <div class="row">
                     <div class="col-md-12">
@@ -397,6 +402,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Show previous recordings -->
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -416,68 +422,70 @@
                                         <th>Edit</th>
                                     </thead>
                                     <tbody>
-<%
-	try {
-		db.getEntityManager().getTransaction().begin();	 
-		Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
-		Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
-		Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
-		User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
-		queryTime.setParameter(1, u.getId());
-		List<Time> values = queryTime.getResultList();
-
-		if (!values.isEmpty()) {
-			long duration;
-			for (Time time : values) {
-				if(time.getEnd() != null){
-					long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
-					TimeUnit tu = TimeUnit.MINUTES;
-					duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
-				}else{
-					duration = 0;
-				}
-				
-				queryTask.setParameter(1, time.getTask_id());
-				List<Task> tasks =  queryTask.getResultList();
-				Task t;
-				String pName = "deleted", tName = "deleted";
-				if (!tasks.isEmpty()) {
-					t = tasks.get(0);
-					queryProj.setParameter(1, t.getProject_id());
-					Project p = (Project)queryProj.getSingleResult();
-					pName = p.getName();
-					tName = t.getName();
-				}
-				
-				out.println("<tr>");
-				out.println("<td>" + pName + "</td>");
-	            out.println("<td>" + tName + "</td>");
-	            out.println("<td>" + time.getStart() + "</td>");
-	            if (time.getEnd() == null) {
-	            	out.println("<td>in progress</td>");	
-	            }
-	            else {
-	            	out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	 
-	            }
-	            if (time.getEnd() == null) {
-	            	out.println("<td>in progress</td>");
-	            }
-	            else {
-		            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>"); 	
-	            }
-	            out.println("<td><a href=\"tracker?editTimeId="
-						+ time.getId()
-						+ "\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
-	            out.println("</tr>");
-			}
-		}
-	}	
-	catch (Exception ex) {
-		 out.println(ex.getMessage());
-	} finally {
- 		db.getEntityManager().getTransaction().commit();
- 	}
-%>
+									<%
+										try {
+											//query data from tables time, project, task
+											db.getEntityManager().getTransaction().begin();	 
+											Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
+											Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
+											Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
+											User u = (User) this.getServletContext().getAttribute(TimeTracker.User);
+											queryTime.setParameter(1, u.getId());
+											List<Time> values = queryTime.getResultList();
+									
+											if (!values.isEmpty()) {
+												long duration;
+												for (Time time : values) {
+													if(time.getEnd() != null){
+														long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
+														TimeUnit tu = TimeUnit.MINUTES;
+														duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
+													}else{
+														duration = 0;
+													}
+													
+													queryTask.setParameter(1, time.getTask_id());
+													List<Task> tasks =  queryTask.getResultList();
+													Task t;
+													String pName = "deleted", tName = "deleted";
+													//overwrite deleted if task and project still exists
+													if (!tasks.isEmpty()) {
+														t = tasks.get(0);
+														queryProj.setParameter(1, t.getProject_id());
+														Project p = (Project)queryProj.getSingleResult();
+														pName = p.getName();
+														tName = t.getName();
+													}
+													
+													out.println("<tr>");
+													out.println("<td>" + pName + "</td>");
+										            out.println("<td>" + tName + "</td>");
+										            out.println("<td>" + time.getStart() + "</td>");
+										            if (time.getEnd() == null) {
+										            	out.println("<td>in progress</td>");	
+										            }
+										            else {
+										            	out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	 
+										            }
+										            if (time.getEnd() == null) {
+										            	out.println("<td>in progress</td>");
+										            }
+										            else {
+											            out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>"); 	
+										            }
+										            out.println("<td><a href=\"tracker?editTimeId="
+															+ time.getId()
+															+ "\" title=\"Edit\"><span class=\"pe-7s-edit\"></span></a></td>");
+										            out.println("</tr>");
+												}
+											}
+										}	
+										catch (Exception ex) {
+											 out.println(ex.getMessage());
+										} finally {
+									 		db.getEntityManager().getTransaction().commit();
+									 	}
+									%>
                                     
                                     </tbody>
                                 </table>

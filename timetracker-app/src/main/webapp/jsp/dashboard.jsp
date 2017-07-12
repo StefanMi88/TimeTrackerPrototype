@@ -138,9 +138,10 @@
 
 
 												<%
-													// Dsiplay Timesof User
+													// Dsiplay Times of User
 													try {
 														db.getEntityManager().getTransaction().begin();	 
+														//query info from time, project and task tables
 														Query queryTime = db.getEntityManager().createNativeQuery("Select * from time t where user_id = ?1 ORDER BY start DESC", Time.class);
 														Query queryProj = db.getEntityManager().createNativeQuery("Select * from Project where id = ?1", Project.class);
 														Query queryTask = db.getEntityManager().createNativeQuery("Select * from Task where id = ?1", Task.class);
@@ -148,45 +149,45 @@
 														queryTime.setParameter(1, u.getId());
 														List<Time> values = queryTime.getResultList();
 														
-
-															if (!values.isEmpty()) {
-															long duration;
-															for (Time time : values) {
-																if(time.getEnd() != null){
-																	long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
-																	TimeUnit tu = TimeUnit.MINUTES;
-																	duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
-																}else{
-																	duration = 0;
-																}
-
-																queryTask.setParameter(1, time.getTask_id());
-																List<Task> tasks =  queryTask.getResultList();
-																Task t;
-																String pName = "deleted", tName = "deleted";
-																if (!tasks.isEmpty()) {
-																	t = tasks.get(0);
-																	queryProj.setParameter(1, t.getProject_id());
-																	Project p = (Project)queryProj.getSingleResult();
-																	pName = p.getName();
-																	tName = t.getName();
-																}
-														out.println("<tr>");
-														out.println("<td>" + pName + "</td>");
-													    out.println("<td>" + tName + "</td>");
-													    out.println("<td>" + time.getStart() + "</td>");
-													    out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
-													    out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
-													    out.println("</tr>");
-													}
+														//output if values were found	
+														if (!values.isEmpty()) {
+														long duration;
+														for (Time time : values) {
+															//calculate duration if task is completed
+															if(time.getEnd() != null){
+																long diffInMillies = time.getEnd().getTime()- time.getStart().getTime();
+																TimeUnit tu = TimeUnit.MINUTES;
+																duration = tu.convert(diffInMillies,TimeUnit.MILLISECONDS);
+															}else{
+																duration = 0;
+															}
+															queryTask.setParameter(1, time.getTask_id());
+															List<Task> tasks =  queryTask.getResultList();
+															Task t;
+															String pName = "deleted", tName = "deleted";
+															//overwrite deleted if task and project still exists
+															if (!tasks.isEmpty()) {
+																t = tasks.get(0);
+																queryProj.setParameter(1, t.getProject_id());
+																Project p = (Project)queryProj.getSingleResult();
+																pName = p.getName();
+																tName = t.getName();
+															}
+															out.println("<tr>");
+															out.println("<td>" + pName + "</td>");
+													    	out.println("<td>" + tName + "</td>");
+													    	out.println("<td>" + time.getStart() + "</td>");
+													    	out.println("<td>" + TimeTracker.NVL(time.getEnd(), "") + "</td>");	  
+													    	out.println("<td>" +  duration/60 + "h "+ duration%60  + "min</td>");
+													    	out.println("</tr>");
 														}
-														
 													}
-													catch (Exception ex) {
-														 out.println(ex.getMessage());
-													} finally {
-												 		db.getEntityManager().getTransaction().commit();
-												 	}
+														
+												} catch (Exception ex) {
+													 out.println(ex.getMessage());
+												} finally {
+												 	db.getEntityManager().getTransaction().commit();
+												}
 												%>
 
 												<tr>
